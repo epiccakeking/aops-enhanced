@@ -14,29 +14,7 @@
     // Your code here...
     //Enhanced quotes
     AoPS.Community.Views.Post.prototype.onClickQuote=function() {
-        if (!AoPS.session.logged_in) {
-            AoPS.Ui.buildLoginConfirm(Lang["topic-full-unregistered-reply"]);
-        } else if (AoPS.isUserLimited()) {
-            Modal.showMessage(Lang["new-reply-no-permission-limited"], {
-                width: "450px",
-            });
-        } else {
-            if (this.topic.model.get("locked")) {
-                Modal.showMessage(Lang["topic-full-reply-to-locked"]);
-            } else if (this.topic.model.get("forum_locked")) {
-                Modal.showMessage(Lang["topic-full-reply-to-forum-locked"]);
-            } else {
-                this.topic.appendToReply(
-                    "[quote name=\"" +
-                    this.model.get("username") +
-                    "\" url=\"https://artofproblemsolving.com/community/p"+
-                    this.model.get("post_id")+
-                    "\"]\n" +
-                    $.trim(this.model.get("post_canonical")) +
-                    "\n[/quote]\n\n"
-                );
-            }
-        }
+        this.topic.appendToReply("[quote name=\"" +this.model.get("username") +"\" url=\"https://artofproblemsolving.com/community/p"+this.model.get("post_id")+"\"]\n" +this.model.get("post_canonical")+"\n[/quote]\n\n");
     }
     //Copy links
     AoPS.Community.Views.Post.prototype.onClickDirectLink=function(){
@@ -53,7 +31,7 @@
     //Notifications
     if (Notification.permission == "default"){
         setTimeout(function(){
-            alert("AoPS Enhanced can change flyouts into browser notifications. If you want this you should close this prompt, click anywhere, allow notifications, and refresh. Otherwise you can block notifications to disable this.");
+            alert("AoPS Enhanced can change flyouts into browser notifications. Grant the permission and refresh the page to enable, block notifications to disable.");
             document.onclick=function(){
                 Notification.requestPermission();
             }
