@@ -20,13 +20,13 @@
     AoPS.Community.Views.Post.prototype.onClickDirectLink=function(){
         var copytemp = document.createElement("input");
         copytemp.type="text";
-        copytemp.style="position: fixed; top: -1000px;"
+        copytemp.style="position: fixed; top: -1000px;"; //May be unnecessary but it should keep the temporary element from briefly causing issues.
         copytemp.value='https://artofproblemsolving.com/community/p'+this.model.get("post_id");
-        document.getElementsByTagName('body')[0].append(copytemp)
+        document.getElementsByTagName('body')[0].append(copytemp);
         copytemp.select();
         document.execCommand("copy");
-        copytemp.remove()
-        AoPS.Ui.Flyout.display("Url copied (https://artofproblemsolving.com/community/p"+this.model.get("post_id")+").")
+        copytemp.remove();
+        AoPS.Ui.Flyout.display("Url copied (https://artofproblemsolving.com/community/p"+this.model.get("post_id")+").");
     }
     //Notifications
     if (Notification.permission == "default"){
@@ -38,7 +38,8 @@
         }, 1000);
     }else{
         AoPS.Ui.Flyout.display=function(x){
-            var notification = new Notification("AoPS Enhanced", {body: x, icon: 'https://artofproblemsolving.com/online-favicon.ico',tag: x});
+            var y=x.replace('<br>','\n');
+            var notification = new Notification("AoPS Enhanced", {body: y, icon: 'https://artofproblemsolving.com/online-favicon.ico',tag: y});
             setTimeout(notification.close.bind(notification), 4000);
         }
     }
