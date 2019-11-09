@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AoPS Enhanced
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.2
 // @description  try to take over the world!
 // @author       happycupcake/EpicCakeKing
 // @match        https://artofproblemsolving.com/*
@@ -14,7 +14,7 @@
     // Your code here...
     //Enhanced quotes
     AoPS.Community.Views.Post.prototype.onClickQuote=function() {
-        this.topic.appendToReply("[quote name=\"" +this.model.get("username") +"\" url=\"https://artofproblemsolving.com/community/p"+this.model.get("post_id")+"\"]\n" +this.model.get("post_canonical")+"\n[/quote]\n\n");
+        this.topic.appendToReply("[quote name=\"" +this.model.get("username") +"\" url=\"https://artofproblemsolving.com/community/p"+this.model.get("post_id")+"\"]\n" +this.model.get("post_canonical").trim()+"\n[/quote]\n\n");
     }
     //Copy links
     AoPS.Community.Views.Post.prototype.onClickDirectLink=function(){
@@ -38,7 +38,9 @@
         }, 1000);
     }else{
         AoPS.Ui.Flyout.display=function(x){
-            var y=x.replace('<br>','\n');
+            var textextract=document.createElement("div")
+            textextract.innerHTML=x.replace('<br>','\n');
+            var y=$(textextract).text()
             var notification = new Notification("AoPS Enhanced", {body: y, icon: 'https://artofproblemsolving.com/online-favicon.ico',tag: y});
             setTimeout(notification.close.bind(notification), 4000);
         }
