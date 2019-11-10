@@ -5,5 +5,6 @@ AoPS Enhanced is a minimal setup required userscript intended to improve the exp
 Current features:<br>
 Quote linking (Uses the built in quote url feature to provide a link to the original post)<br>
 Post url copying (Clicking the post number copies the link to the post)<br>
-Notifications as flyouts (An optional feature that changes flyouts into browser notifications)<br>
+Flyouts as notifications (An optional feature that changes flyouts into browser notifications)<br>
 Community keep awake (Disables putting the community to sleep after inactivity)<br>
+Moderate from feed.
