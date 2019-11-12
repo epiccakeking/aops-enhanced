@@ -8,3 +8,4 @@ Post url copying (Clicking the post number copies the link to the post)<br>
 Flyouts as notifications (An optional feature that changes flyouts into browser notifications)<br>
 Community keep awake (Disables putting the community to sleep after inactivity)<br>
 Moderate from feed.
+Custom auto tags (Add your own tags to the autotagger, must have autotagging enabled).
