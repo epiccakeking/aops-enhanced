@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AoPS Enhanced
 // @namespace    http://tampermonkey.net/
-// @version      0.4
+// @version      0.4.1
 // @description  try to take over the world!
 // @author       happycupcake/EpicCakeKing
 // @match        https://artofproblemsolving.com/*
@@ -76,7 +76,12 @@ display: inline !Important;
         }
     })
     if (window.location.href=='https://artofproblemsolving.com/enhancedsettings'){
-        $('#main-column-standard')[0].innerHTML=`<h2>Custom Autotag</h2><p>Format your autotags as "Trigger text", "Tag name". USE DOUBLE QUOTES, otherwise errors may occur. Tags and triggers must be inputted all lowercase.</p><textarea id='enhancedcustomautotag'></textarea><input type='button' onclick="localStorage.setItem('customautotags',document.getElementById('enhancedcustomautotag').value);">Save</input>`;
+        $('#main-column-standard')[0].innerHTML=`<div class="aops-panel">
+<h2>Custom Autotag</h2>
+<p>Format your autotags as "Trigger text", "Tag name". USE DOUBLE QUOTES, otherwise errors may occur. Tags and triggers must be inputted all lowercase.</p>
+<textarea id='enhancedcustomautotag'></textarea>
+<input type='button' onclick="localStorage.setItem('customautotags',document.getElementById('enhancedcustomautotag').value);">Save</input>
+</div>`;
         document.getElementById('enhancedcustomautotag').value=localStorage.getItem('customautotags')
     }
 })();
