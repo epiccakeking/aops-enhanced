@@ -47,13 +47,13 @@
         //Disable idle monitor
         AoPS.Community.Constants.idle_monitor_interval=0;
         //Add custom stylesheet
-        var sheet=document.createElement('style')
+        var sheet=document.createElement('style');
         sheet.innerHTML=`
 #feed-topic .cmty-topic-moderate{
 display: inline !Important;
 }
 `
-        document.getElementsByTagName('head')[0].appendChild(sheet)
+        document.getElementsByTagName('head')[0].appendChild(sheet);
         //Custom tag map
         function tagmapadd(triggertext,tag){
             AoPS.Community.term_tag_map[triggertext]= [
@@ -65,9 +65,9 @@ display: inline !Important;
                 }
             ]
         }
-        var ctags=JSON.parse('[['+localStorage.getItem('customautotags').replace('\\n','],[')+']]')
+        var ctags=JSON.parse('[['+localStorage.getItem('customautotags').replace('\\n','],[')+']]');
         for (var tag in ctags){
-            tagmapadd(ctags[tag][0],ctags[tag][1])
+            tagmapadd(ctags[tag][0],ctags[tag][1]);
         }
     }
     $(document).ready(function() {
@@ -82,6 +82,6 @@ display: inline !Important;
 <textarea id='enhancedcustomautotag'></textarea>
 <input type='button' onclick="localStorage.setItem('customautotags',document.getElementById('enhancedcustomautotag').value);">Save</input>
 </div>`;
-        document.getElementById('enhancedcustomautotag').value=localStorage.getItem('customautotags')
+        document.getElementById('enhancedcustomautotag').value=localStorage.getItem('customautotags');
     }
 })();
