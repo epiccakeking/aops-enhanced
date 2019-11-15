@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AoPS Enhanced
 // @namespace    http://tampermonkey.net/
-// @version      0.4.1
+// @version      0.4.2
 // @description  try to take over the world!
 // @author       happycupcake/EpicCakeKing
 // @match        https://artofproblemsolving.com/*
@@ -69,10 +69,13 @@ display: inline !Important;
         for (var tag in ctags){
             tagmapadd(ctags[tag][0],ctags[tag][1]);
         }
+        //Change post deleted action
+        AoPS.Community.Views.Post.prototype.removePostFromTopic=AoPS.Community.Views.Post.prototype.setVisibility
+
     }
     $(document).ready(function() {
         if (document.getElementById('enhancedsettings')==null){
-        $($('.menubar-label.resources .dropdown-category')[0]).prepend('<a href="#" onclick="window.location.href=\'/enhancedsettings\'" id="enhancedsettings">AoPS Enhanced Settings</a>');
+            $($('.menubar-label.resources .dropdown-category')[0]).prepend('<a href="#" onclick="window.location.href=\'/enhancedsettings\'" id="enhancedsettings">AoPS Enhanced Settings</a>');
         }
     })
     if (window.location.href=='https://artofproblemsolving.com/enhancedsettings'){
@@ -80,7 +83,7 @@ display: inline !Important;
 <h2>Custom Autotag</h2>
 <p>Format your autotags as "Trigger text", "Tag name". USE DOUBLE QUOTES, otherwise errors may occur. Tags and triggers must be inputted all lowercase.</p>
 <textarea id='enhancedcustomautotag'></textarea>
-<input type='button' onclick="localStorage.setItem('customautotags',document.getElementById('enhancedcustomautotag').value);">Save</input>
+<button type='button' onclick="localStorage.setItem('customautotags',document.getElementById('enhancedcustomautotag').value);">Save</button>
 </div>`;
         document.getElementById('enhancedcustomautotag').value=localStorage.getItem('customautotags');
     }
