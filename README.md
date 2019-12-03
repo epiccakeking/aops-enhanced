@@ -9,7 +9,7 @@ Click on a feature to see a short demonstration video of the feature.<br>
 <a href='https://streamable.com/bossk'>Copy post urls</a><br>
 <a href='https://streamable.com/ymm9r'>Flyouts as notifications</a><br>
 Keep community awake**<br>
-Moderate from feed*<br>
+<a href='https://streamable.com/lhdr7'>Moderate from feed</a><br>
 Custom auto tags*<br>
 <a href='https://streamable.com/u5jy9'>Read deleted</a><br>
 <br>
