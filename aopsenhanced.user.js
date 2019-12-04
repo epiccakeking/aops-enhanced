@@ -184,12 +184,13 @@ display: inline !Important;
 <div class="aops-panel">
 <h2>Dark mode settings</h2>
 <p>Use these options to toggle dark mode. Try turning compatibility mode on or off if things are broken. Options autosave.</p>
-<label><input type="checkbox" id="darktheme" onclick="localStorage.setItem('darktheme', JSON.stringify(this.checked));"/> dark mode</label><br>
-<label><input type="checkbox" id="darkthemecompat" onclick="localStorage.setItem('darkthemecompat', JSON.stringify(this.checked));"/> dark mode compatibility mode (Loads a background image from imgur)</label><br><br>
-<label><input type="checkbox" id="darkontimer" onclick="localStorage.setItem('darkontimer', JSON.stringify(this.checked));"/>on timer</label><br>
-<label><input type="number" min='0' max='12' id="darkstart" onchange="localStorage.setItem('darkstart', JSON.stringify(this.value));"/>Starting hour (PM)</label><br>
-<label><input type="number" min='0' max='12' id="darkend" onchange="localStorage.setItem('darkend', JSON.stringify(this.value));"/>Ending hour (AM)</label><br>
-<label><input type="number" min='1' max='300' id="darkinterval" onchange="localStorage.setItem('darkinterval', JSON.stringify(this.value));"/>Checking interval (In seconds, default is 5). </label>
+<label><input type="checkbox" id="darktheme" onclick="localStorage.setItem('darktheme', JSON.stringify(this.checked));"/> Dark mode</label><br>
+<label><input type="checkbox" id="darkthemecompat" onclick="localStorage.setItem('darkthemecompat', JSON.stringify(this.checked));"/> Dark mode compatibility mode (Loads a background image from imgur)</label><br>
+<h3>Scheduling options</h3>
+<label><input type="checkbox" id="darkontimer" onclick="localStorage.setItem('darkontimer', JSON.stringify(this.checked));"/> Dark mode on schedule</label><br>
+<label><input type="number" min='0' max='12' id="darkstart" onchange="localStorage.setItem('darkstart', JSON.stringify(this.value));"/> Starting hour (PM)</label><br>
+<label><input type="number" min='0' max='12' id="darkend" onchange="localStorage.setItem('darkend', JSON.stringify(this.value));"/> Ending hour (AM)</label><br>
+<label><input type="number" min='1' max='300' id="darkinterval" onchange="localStorage.setItem('darkinterval', JSON.stringify(this.value));"/> Checking interval (In seconds, default is 5). </label>
 </div>`;
             document.getElementById('enhancedcustomautotag').value=localStorage.getItem('customautotags');
             document.getElementById('darktheme').checked=JSON.parse(localStorage.getItem('darktheme'));
