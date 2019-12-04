@@ -11,10 +11,12 @@
 
 (function() {
     'use strict';
+    //Dark theme options
     var darkstart=Number(JSON.parse(localStorage.getItem('darkstart')));
     var darkend=Number(JSON.parse(localStorage.getItem('darkend')));
     var currdark=Number((new Date().getHours())>=12+darkstart || (new Date().getHours())<darkend)
     var darkontimer=JSON.parse(localStorage.getItem('darkontimer'));
+    var darkinterval=Number(JSON.parse(localStorage.getItem('darkinterval'))) || 5;
     if(darkontimer){
         setInterval(function(){
             var newdark=Number((new Date().getHours())>=12+darkstart || (new Date().getHours())<darkend)
@@ -22,7 +24,7 @@
                 darkthemeupdate()
                 currdark=newdark;
             }
-        },1000);
+        },darkinterval*1000);
     }
     function darkthemeupdate(){
         if (JSON.parse(localStorage.getItem('darktheme'))){
@@ -186,7 +188,8 @@ display: inline !Important;
 <label><input type="checkbox" id="darkthemecompat" onclick="localStorage.setItem('darkthemecompat', JSON.stringify(this.checked));"/> dark mode compatibility mode (Loads a background image from imgur)</label><br><br>
 <label><input type="checkbox" id="darkontimer" onclick="localStorage.setItem('darkontimer', JSON.stringify(this.checked));"/>on timer</label><br>
 <label><input type="number" min='0' max='12' id="darkstart" onchange="localStorage.setItem('darkstart', JSON.stringify(this.value));"/>Starting hour (PM)</label><br>
-<label><input type="number" min='0' max='12' id="darkend" onchange="localStorage.setItem('darkend', JSON.stringify(this.value));"/>Ending hour (AM)</label>
+<label><input type="number" min='0' max='12' id="darkend" onchange="localStorage.setItem('darkend', JSON.stringify(this.value));"/>Ending hour (AM)</label><br>
+<label><input type="number" min='1' max='300' id="darkinterval" onchange="localStorage.setItem('darkinterval', JSON.stringify(this.value));"/>Checking interval (In seconds, default is 5). </label>
 </div>`;
             document.getElementById('enhancedcustomautotag').value=localStorage.getItem('customautotags');
             document.getElementById('darktheme').checked=JSON.parse(localStorage.getItem('darktheme'));
@@ -194,6 +197,7 @@ display: inline !Important;
             document.getElementById('darkontimer').checked=JSON.parse(localStorage.getItem('darkontimer'));
             document.getElementById('darkstart').value=JSON.parse(localStorage.getItem('darkstart'));
             document.getElementById('darkend').value=JSON.parse(localStorage.getItem('darkend'));
+            document.getElementById('darkinterval').value=JSON.parse(localStorage.getItem('darkinterval'));
         }
     });
 })();
