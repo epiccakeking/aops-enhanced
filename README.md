@@ -3,15 +3,13 @@ AoPS Enhanced is a userscript for artofproblemsolving.com intended to be user fr
 <a href='https://github.com/epiccakeking/aops-enhanced/raw/master/aopsenhanced.user.js'>Install AoPS Enhanced</a> (Requires Tampermonkey)<br>
 <br>
 # Features
-Click on a feature to see a short demonstration video of the feature.<br>
-<a href=#>Moderate from feed</a>*<br>
-<a href='#'>Quote linking</a>*<br>
-<a href='https://streamable.com/bossk'>Copy post urls</a><br>
-<a href='https://streamable.com/ymm9r'>Flyouts as notifications</a><br>
-Keep community awake**<br>
-<a href='https://streamable.com/lhdr7'>Moderate from feed</a><br>
-Custom auto tags*<br>
-<a href='https://streamable.com/u5jy9'>Read deleted</a><br>
+Quoting links back to the original post.<br>
+Click post number to copy the url of the post.<br>
+Replace flyouts with browser notifications.*<br>
+Disable idle monitor (Prevents community falling asleep).<br>
+Moderate topics from the feed.<br>
+Add custom tags to autotagging.*<br>
+Read messages deleted while on topic.<br>
+Use a schedulable dark theme for AoPS.*<br>
 <br>
-*Video not yet made<br>
-**Video Not Applicable<br>
+*Optional feature
