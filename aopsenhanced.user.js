@@ -34,6 +34,34 @@
                 theme=0
             }
         }
+        var persistdarkcode=`*{
+  scrollbar-color: #04a3af #333533;
+}
+::-webkit-scrollbar-track{
+  background: #333533;
+}
+::-webkit-scrollbar-thumb{
+  background: #04a3af;
+}
+.cmty-topic-posts-top *:not(.cmty-item-tag){
+color: black !important;
+}
+#page-wrapper img:not([class*='latex']):not([class*='asy']),
+#feed-wrapper img:not([class*='latex']):not([class*='asy']){
+filter: hue-rotate(180deg) invert(1);
+}
+.bbcode_smiley[src*='latex']{
+filter: none !important;
+}
+.cmty-topic-posts-top,
+.cmty-postbox-inner-box,
+.cmty-topic-posts-bottom,
+.aops-scroll-outer{
+background: #ddd !important;
+}
+.aops-scroll-slider{
+background: #222 !important;
+}`
         var darks=[``,`:root{
 mix-blend-mode: difference;
 background: white;
@@ -42,25 +70,6 @@ background: white;
 .aops-modal-wrapper,
 #feed-wrapper > * > *{
 filter: hue-rotate(180deg);
-}
-.cmty-topic-posts-top *:not(.cmty-item-tag){
-color: black !important;
-}
-#page-wrapper img:not([class*='latex']):not([class*='asy']),
-#feed-wrapper img:not([class*='latex']):not([class*='asy']){
-filter: hue-rotate(180deg) invert(1);
-}
-.bbcode_smiley[src*='latex']{
-filter: none !important;
-}
-.cmty-topic-posts-top,
-.cmty-postbox-inner-box,
-.cmty-topic-posts-bottom,
-.aops-scroll-outer{
-background: #ddd !important;
-}
-.aops-scroll-slider{
-background: #222 !important;
 }`,`#page-wrapper,
 .aops-modal-wrapper,
 #feed-wrapper > * > *{
@@ -68,36 +77,21 @@ filter: invert(1) hue-rotate(180deg);
 }
 body{
 background: url('https://i.imgur.com/eklsU6V.png') !important;
-}
-.cmty-topic-posts-top *:not(.cmty-item-tag){
-color: black !important;
-}
-#page-wrapper img:not([class*='latex']):not([class*='asy']),
-#feed-wrapper img:not([class*='latex']):not([class*='asy']){
-filter: hue-rotate(180deg) invert(1);
-}
-.bbcode_smiley[src*='latex']{
-filter: none !important;
-}
-.cmty-topic-posts-top,
-.cmty-postbox-inner-box,
-.cmty-topic-posts-bottom,
-.aops-scroll-outer{
-background: #ddd !important;
-}
-.aops-scroll-slider{
-background: #222 !important;
 }`]
         var head=document.getElementsByTagName('head')[0];
         if (theme!=null){
-            if (document.getElementById("ctheme")==null){
+            if (document.getElementById("theme")==null){
                 var elmnttheme=document.createElement('style');
                 elmnttheme.id="theme"
                 head.appendChild(elmnttheme);
             }else{
                 head.appendChild(document.getElementById("theme"));
             }
-            document.getElementById("theme").innerHTML=darks[theme];
+            if (theme!=0){
+                document.getElementById("theme").innerHTML=persistdarkcode+darks[theme];
+            }else{
+                document.getElementById("theme").innerHTML=''
+            }
         }
     }
     /*Update dark theme*/
@@ -147,6 +141,9 @@ background: #222 !important;
             sheet.innerHTML=`
 #feed-topic .cmty-topic-moderate{
 display: inline !Important;
+}
+#feed-wrapper .aops-scroll-inner{
+overscroll-behavior: contain;
 }
 `
             document.getElementsByTagName('head')[0].appendChild(sheet);
