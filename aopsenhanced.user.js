@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AoPS Enhanced
 // @namespace    http://tampermonkey.net/
-// @version      0.5.3
+// @version      0.5.4
 // @description  try to take over the world!
 // @author       happycupcake/EpicCakeKing
 // @match        https://artofproblemsolving.com/*
@@ -36,13 +36,13 @@
         }
         var persistdarkcode=`
 *{
-  scrollbar-color: #04a3af #333533;
+scrollbar-color: #04a3af #333533;
 }
 ::-webkit-scrollbar-track{
-  background: #333533;
+background: #333533;
 }
 ::-webkit-scrollbar-thumb{
-  background: #04a3af;
+background: #04a3af;
 }
 .cmty-topic-posts-top *:not(.cmty-item-tag){
 color: black !important;
@@ -104,19 +104,19 @@ background: url('https://i.imgur.com/eklsU6V.png') !important;
         if (AoPS.Community){
             //Enhanced quotes
             AoPS.Community.Views.Post.prototype.onClickQuote=function() {
-                this.topic.appendToReply("[quote name=\"" +this.model.get("username") +"\" url=\"https://artofproblemsolving.com/community/p"+this.model.get("post_id")+"\"]\n" +this.model.get("post_canonical").trim()+"\n[/quote]\n\n");
+                this.topic.appendToReply("[quote name=\"" +this.model.get("username") +"\" url=\"https://aops.com/community/p"+this.model.get("post_id")+"\"]\n" +this.model.get("post_canonical").trim()+"\n[/quote]\n\n");
             }
             //Copy links
-            AoPS.Community.Views.Post.prototype.onClickDirectLink=function(){
+            AoPS.Community.Views.Post.prototype.onClickDirectLink=function(e){
                 var copytemp = document.createElement("input");
                 copytemp.type="text";
                 copytemp.style="position: fixed; top: -1000px;"; //May be unnecessary but it should keep the temporary element from briefly causing issues.
-                copytemp.value='https://artofproblemsolving.com/community/p'+this.model.get("post_id");
+                copytemp.value='https://aops.com/community/p'+this.model.get("post_id");
                 document.getElementsByTagName('body')[0].append(copytemp);
                 copytemp.select();
                 document.execCommand("copy");
                 copytemp.remove();
-                AoPS.Ui.Flyout.display("Url copied (https://artofproblemsolving.com/community/p"+this.model.get("post_id")+").");
+                AoPS.Ui.Flyout.display("Url copied (https://aops.com/community/p"+this.model.get("post_id")+").");
             }
             //Notifications
             if (Notification.permission == "default"){
@@ -126,7 +126,8 @@ background: url('https://i.imgur.com/eklsU6V.png') !important;
                         Notification.requestPermission();
                     }
                 }, 1000);
-            }else{
+            }
+            if (Notification.permission == "granted"){
                 AoPS.Ui.Flyout.display=function(x){
                     var textextract=document.createElement("div")
                     textextract.innerHTML=x.replace('<br>','\n');
