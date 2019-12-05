@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AoPS Enhanced
 // @namespace    http://tampermonkey.net/
-// @version      0.5.2
+// @version      0.5.3
 // @description  try to take over the world!
 // @author       happycupcake/EpicCakeKing
 // @match        https://artofproblemsolving.com/*
@@ -34,7 +34,8 @@
                 theme=0
             }
         }
-        var persistdarkcode=`*{
+        var persistdarkcode=`
+*{
   scrollbar-color: #04a3af #333533;
 }
 ::-webkit-scrollbar-track{
@@ -88,7 +89,7 @@ background: url('https://i.imgur.com/eklsU6V.png') !important;
                 head.appendChild(document.getElementById("theme"));
             }
             if (theme!=0){
-                document.getElementById("theme").innerHTML=persistdarkcode+darks[theme];
+                document.getElementById("theme").innerHTML=darks[theme]+persistdarkcode;
             }else{
                 document.getElementById("theme").innerHTML=''
             }
