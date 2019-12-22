@@ -96,10 +96,10 @@ background: url('https://i.imgur.com/eklsU6V.png') !important;
         }
     }
     /*Update dark theme*/
-    darkthemeupdate()
+    try{darkthemeupdate();}catch(e){};
     document.addEventListener('DOMContentLoaded', function() {
         /*Ensure proper application of darkmode*/
-        darkthemeupdate()
+        try{darkthemeupdate();}catch(e){};
         /*Safety first!*/
         if (AoPS.Community){
             //Enhanced quotes
