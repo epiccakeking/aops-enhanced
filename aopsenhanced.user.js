@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AoPS Enhanced
 // @namespace    http://tampermonkey.net/
-// @version      0.5.6
+// @version      0.5.6.1
 // @description  try to take over the world!
 // @author       happycupcake/EpicCakeKing
 // @match        https://artofproblemsolving.com/*
@@ -64,7 +64,7 @@ background: #ddd !important;
 background: #222 !important;
 }
 iframe{
-  filter: invert(1);
+  filter: invert(1) hue-rotate(180deg);
 }`
         var darks=[``,`:root{
 mix-blend-mode: difference;
