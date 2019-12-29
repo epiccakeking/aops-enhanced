@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AoPS Enhanced
 // @namespace    http://tampermonkey.net/
-// @version      0.5.6.1
+// @version      0.5.7
 // @description  try to take over the world!
 // @author       happycupcake/EpicCakeKing
 // @match        https://artofproblemsolving.com/*
@@ -107,7 +107,7 @@ background: url('https://i.imgur.com/eklsU6V.png') !important;
         if (AoPS.Community){
             //Enhanced quotes
             AoPS.Community.Views.Post.prototype.onClickQuote=function() {
-                this.topic.appendToReply("[quote name=\"" +this.model.get("username") +"\" url=\"https://aops.com/community/p"+this.model.get("post_id")+"\"]\n" +this.model.get("post_canonical").trim()+"\n[/quote]\n\n");
+                this.topic.appendToReply("[quote name=\"" +this.model.get("username") +"\" url=\"/community/p"+this.model.get("post_id")+"\"]\n" +this.model.get("post_canonical").trim()+"\n[/quote]\n\n");
             }
             //Copy links
             AoPS.Community.Views.Post.prototype.onClickDirectLink=function(e){
