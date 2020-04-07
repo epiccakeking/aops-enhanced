@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         AoPS Enhanced
 // @namespace    http://tampermonkey.net/
-// @version      0.5.7
+// @version      0.5.8
 // @description  try to take over the world!
-// @author       happycupcake/EpicCakeKing
+// @author       happycupcake/epiccakeking
 // @match        https://artofproblemsolving.com/*
 // @grant        none
 // @run-at document-start
@@ -153,6 +153,7 @@ overscroll-behavior: contain;
 `
             document.getElementsByTagName('head')[0].appendChild(sheet);
             //Custom tag map
+          if (localStorage.getItem('customautotags')!=null){
             function tagmapadd(triggertext,tag){
                 AoPS.Community.term_tag_map[triggertext]= [
                     {
@@ -167,6 +168,7 @@ overscroll-behavior: contain;
             for (var tag in ctags){
                 tagmapadd(ctags[tag][0],ctags[tag][1]);
             }
+          }
             //Change post deleted action
             AoPS.Community.Views.Post.prototype.removePostFromTopic=AoPS.Community.Views.Post.prototype.setVisibility
 
