@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AoPS Enhanced
 // @namespace    http://tampermonkey.net/
-// @version      0.5.8
+// @version      0.5.9
 // @description  try to take over the world!
 // @author       happycupcake/epiccakeking
 // @match        https://artofproblemsolving.com/*
@@ -171,7 +171,11 @@ overscroll-behavior: contain;
           }
             //Change post deleted action
             AoPS.Community.Views.Post.prototype.removePostFromTopic=AoPS.Community.Views.Post.prototype.setVisibility
-
+            //Allow editing in locked topics
+          AoPS.Community.Views.Post.prototype["render"]=new Function (
+            "a",
+            AoPS.Community.Views.Post.prototype["render"].toString().replace(/^function[^{]+{/i, "var e=AoPS.Community.Lang;").replace("can_edit:", "can_edit: this.model.get('is_forum_mod') && !this.topic.model.get('forum_locked')||").replace(/}[^}]*$/i, "")
+          );
         }
         $(document).ready(function() {
             if (document.getElementById('enhancedsettings')==null){
