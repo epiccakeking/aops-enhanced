@@ -11,5 +11,6 @@ Moderate topics from the feed.<br>
 Add custom tags to autotagging.\*<br>
 Read messages deleted while on topic.<br>
 Use a schedulable dark theme for AoPS.\*<br>
+Moderators can edit in locked topics.<br>
 <br>
 *Optional feature
