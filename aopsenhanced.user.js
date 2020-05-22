@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AoPS Enhanced
 // @namespace    http://tampermonkey.net/
-// @version      0.5.9
+// @version      0.5.10a1
 // @description  try to take over the world!
 // @author       happycupcake/epiccakeking
 // @match        https://artofproblemsolving.com/*
@@ -25,6 +25,21 @@
                 currdark=newdark;
             }
         },darkinterval*1000);
+    }
+    function blockthreads(){
+        var head=document.getElementsByTagName('head')[0];
+        if (localStorage.getItem('blockedthreads')){
+            if (document.getElementById("blockthread")==null){
+                var blockthread=document.createElement('style');
+                blockthread.id="blockthread"
+                head.appendChild(blockthread);
+            }else{
+                head.appendChild(document.getElementById("blockthread"));
+            }
+            document.getElementById("blockthread").innerText='.cmty-topic-cell[title*="'+localStorage.getItem('blockedthreads').split("\n").join('"], .cmty-topic-cell[title*="')+`"]{
+                display: none;
+            }`;
+        }
     }
     function darkthemeupdate(){
         if (JSON.parse(localStorage.getItem('darktheme'))){
@@ -176,6 +191,8 @@ overscroll-behavior: contain;
             "a",
             AoPS.Community.Views.Post.prototype["render"].toString().replace(/^function[^{]+{/i, "var e=AoPS.Community.Lang;").replace("can_edit:", "can_edit: this.model.get('is_forum_mod') && !this.topic.model.get('forum_locked')||").replace(/}[^}]*$/i, "")
           );
+          //Block threads
+          blockthreads()
         }
         $(document).ready(function() {
             if (document.getElementById('enhancedsettings')==null){
@@ -183,9 +200,9 @@ overscroll-behavior: contain;
             }
         })
         if (window.location.href=='https://artofproblemsolving.com/enhancedsettings'){
-            $('#main-column-standard')[0].innerHTML=`<div class="aops-panel">
-<h2>Custom Autotag</h2>
-<p>Format your autotags as "Trigger text", "Tag name". USE DOUBLE QUOTES, otherwise errors may occur. Tags and triggers must be inputted all lowercase.</p>
+            $('#main-column-standard')[0].innerHTML=`<h1>AoPS Enhanced Settings</h1><div class="aops-panel">
+<h2>Custom Autotags</h2>
+<p>Format your autotags as "Trigger text", "Tag name" and put each on a new line. USE DOUBLE QUOTES, otherwise errors may occur. Tags and triggers must be inputted all lowercase.</p>
 <textarea id='enhancedcustomautotag'></textarea>
 <button type='button' onclick="localStorage.setItem('customautotags',document.getElementById('enhancedcustomautotag').value);">Save</button>
 </div>
@@ -199,6 +216,12 @@ overscroll-behavior: contain;
 <label><input type="number" min='0' max='12' id="darkstart" onchange="localStorage.setItem('darkstart', JSON.stringify(this.value));"/> Starting hour (PM)</label><br>
 <label><input type="number" min='0' max='12' id="darkend" onchange="localStorage.setItem('darkend', JSON.stringify(this.value));"/> Ending hour (AM)</label><br>
 <label><input type="number" min='1' max='300' id="darkinterval" onchange="localStorage.setItem('darkinterval', JSON.stringify(this.value));"/> Checking interval (In seconds, default is 5). </label>
+</div>
+<div class="aops-panel">
+<h2>Blocked threads</h2>
+<p>Type a list of terms to match, one per line.</p>
+<textarea id='blockedthreads'></textarea>
+<button type='button' onclick="localStorage.setItem('blockedthreads',document.getElementById('blockedthreads').value);">Save</button>
 </div>`;
             document.getElementById('enhancedcustomautotag').value=localStorage.getItem('customautotags');
             document.getElementById('darktheme').checked=JSON.parse(localStorage.getItem('darktheme'));
@@ -207,6 +230,7 @@ overscroll-behavior: contain;
             document.getElementById('darkstart').value=JSON.parse(localStorage.getItem('darkstart'));
             document.getElementById('darkend').value=JSON.parse(localStorage.getItem('darkend'));
             document.getElementById('darkinterval').value=JSON.parse(localStorage.getItem('darkinterval'));
+            document.getElementById('blockedthreads').value=localStorage.getItem('blockedthreads');
         }
     });
 })();
