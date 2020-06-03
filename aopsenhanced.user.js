@@ -54,6 +54,9 @@
             }
         }
         var persistdarkcode=`
+.cmty-topic-jump{
+color: #000;
+}
 *{
 scrollbar-color: #04a3af #333533;
 }
