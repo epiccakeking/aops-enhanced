@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AoPS Enhanced
 // @namespace    http://tampermonkey.net/
-// @version      0.5.10a1
+// @version      0.5.11a1
 // @description  try to take over the world!
 // @author       happycupcake/epiccakeking
 // @match        https://artofproblemsolving.com/*
@@ -11,6 +11,10 @@
 
 (function() {
     'use strict';
+    //Autoset notifications
+    if (localStorage.getItem('enhancednotifications') == null && Notification.permission == "granted"){
+      localStorage.setItem('enhancednotifications', 'true');
+    }
     //Dark theme options
     var darkstart=Number(JSON.parse(localStorage.getItem('darkstart')));
     var darkend=Number(JSON.parse(localStorage.getItem('darkend')));
@@ -50,6 +54,9 @@
             }
         }
         var persistdarkcode=`
+.cmty-topic-jump{
+color: #000;
+}
 *{
 scrollbar-color: #04a3af #333533;
 }
@@ -137,22 +144,23 @@ background: url('https://i.imgur.com/eklsU6V.png') !important;
                 AoPS.Ui.Flyout.display("Url copied (https://aops.com/community/p"+this.model.get("post_id")+").");
             }
             //Notifications
-            if (Notification.permission == "default"){
+            if (localStorage.getItem('enhancednotifications')=='true'){
+              if (Notification.permission == "granted"){
+                  AoPS.Ui.Flyout.display=function(x){
+                      var textextract=document.createElement("div")
+                      textextract.innerHTML=x.replace('<br>','\n');
+                      var y=$(textextract).text()
+                      var notification = new Notification("AoPS Enhanced", {body: y, icon: 'https://artofproblemsolving.com/online-favicon.ico',tag: y});
+                      setTimeout(notification.close.bind(notification), 4000);
+                  }
+              }else{
                 setTimeout(function(){
-                    alert("AoPS Enhanced can change flyouts into browser notifications. Grant the permission and refresh the page to enable, block notifications to disable.");
-                    document.onclick=function(){
-                        Notification.requestPermission();
-                    }
-                }, 1000);
-            }
-            if (Notification.permission == "granted"){
-                AoPS.Ui.Flyout.display=function(x){
-                    var textextract=document.createElement("div")
-                    textextract.innerHTML=x.replace('<br>','\n');
-                    var y=$(textextract).text()
-                    var notification = new Notification("AoPS Enhanced", {body: y, icon: 'https://artofproblemsolving.com/online-favicon.ico',tag: y});
-                    setTimeout(notification.close.bind(notification), 4000);
-                }
+                  alert("Please grant permission to send notifications or turn off notifications at https://artofproblemsolving.com/enhancedsettings");
+                  document.onclick=function(){
+                      Notification.requestPermission();
+                  }
+                },1000);
+              }
             }
             //Disable idle monitor
             AoPS.Community.Constants.idle_monitor_interval=0;
@@ -218,6 +226,10 @@ overscroll-behavior: contain;
 <label><input type="number" min='1' max='300' id="darkinterval" onchange="localStorage.setItem('darkinterval', JSON.stringify(this.value));"/> Checking interval (In seconds, default is 5). </label>
 </div>
 <div class="aops-panel">
+<h2>Notifications</h2>
+<label><input type="checkbox" id="enhancednotifications" onclick="localStorage.setItem('enhancednotifications', JSON.stringify(this.checked));"/> Use browser notifications instead of flyouts.</label><br>
+</div>
+<div class="aops-panel">
 <h2>Blocked threads</h2>
 <p>Type a list of terms to match, one per line.</p>
 <textarea id='blockedthreads'></textarea>
@@ -231,6 +243,7 @@ overscroll-behavior: contain;
             document.getElementById('darkend').value=JSON.parse(localStorage.getItem('darkend'));
             document.getElementById('darkinterval').value=JSON.parse(localStorage.getItem('darkinterval'));
             document.getElementById('blockedthreads').value=localStorage.getItem('blockedthreads');
+            document.getElementById('enhancednotifications').checked=localStorage.getItem('enhancednotifications');
         }
     });
 })();
