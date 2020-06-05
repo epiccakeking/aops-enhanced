@@ -14,5 +14,7 @@ Read messages deleted while on topic.<br>
 Use a schedulable dark theme for AoPS.\*<br>
 Moderators can edit in locked topics.<br>
 Threads containing certain words or phrases in the title can be filtered out.<br>
+Mods can edit posts in locked topics.<br>
+Highlight posts that are already reported.<br>
 <br>
 *Optional feature
