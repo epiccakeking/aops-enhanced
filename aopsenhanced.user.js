@@ -197,7 +197,7 @@ overscroll-behavior: contain;
             //Allow editing in locked topics
           AoPS.Community.Views.Post.prototype["render"]=new Function (
             "a",
-            AoPS.Community.Views.Post.prototype["render"].toString().replace(/^function[^{]+{/i, "var e=AoPS.Community.Lang;").replace("can_edit:", "can_edit: this.topic.model.attributes.permissions.c_can_edit ||").replace(/}[^}]*$/i, "")
+            AoPS.Community.Views.Post.prototype["render"].toString().replace(/^function[^{]+{/i, "var e=AoPS.Community.Lang;").replace("can_edit:", "can_edit: this.topic.model.attributes.permissions.c_can_edit ||").replace("highlight_report_button:", "highlight_report_button: s.is_reported ||").replace(/}[^}]*$/i, "")
           );
           //Block threads
           blockthreads()
