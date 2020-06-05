@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AoPS Enhanced
 // @namespace    http://tampermonkey.net/
-// @version      5.11
+// @version      5.12
 // @description  try to take over the world!
 // @author       happycupcake/epiccakeking
 // @match        https://artofproblemsolving.com/*
