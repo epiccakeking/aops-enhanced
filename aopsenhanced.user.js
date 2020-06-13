@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AoPS Enhanced
 // @namespace    http://tampermonkey.net/
-// @version      5.12
+// @version      5.13
 // @description  try to take over the world!
 // @author       happycupcake/epiccakeking
 // @match        https://artofproblemsolving.com/*
@@ -195,9 +195,10 @@ overscroll-behavior: contain;
             //Change post deleted action
             AoPS.Community.Views.Post.prototype.removePostFromTopic=AoPS.Community.Views.Post.prototype.setVisibility
             //Allow editing in locked topics
+            //Since people seem to think this is a bug, removed .replace("highlight_report_button:", "highlight_report_button: s.is_reported ||") temporarily until a better solution can be found.
           AoPS.Community.Views.Post.prototype["render"]=new Function (
             "a",
-            AoPS.Community.Views.Post.prototype["render"].toString().replace(/^function[^{]+{/i, "var e=AoPS.Community.Lang;").replace("can_edit:", "can_edit: this.topic.model.attributes.permissions.c_can_edit ||").replace("highlight_report_button:", "highlight_report_button: s.is_reported ||").replace(/}[^}]*$/i, "")
+            AoPS.Community.Views.Post.prototype["render"].toString().replace(/^function[^{]+{/i, "var e=AoPS.Community.Lang;").replace("can_edit:", "can_edit: this.topic.model.attributes.permissions.c_can_edit ||").replace(/}[^}]*$/i, "")
           );
           //Block threads
           blockthreads()
