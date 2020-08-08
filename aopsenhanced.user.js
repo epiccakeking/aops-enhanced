@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AoPS Enhanced
 // @namespace    http://tampermonkey.net/
-// @version      5.13
+// @version      5.14
 // @description  try to take over the world!
 // @author       happycupcake/epiccakeking
 // @match        https://artofproblemsolving.com/*
@@ -11,10 +11,6 @@
 
 (function() {
     'use strict';
-    //Autoset notifications
-    if (localStorage.getItem('enhancednotifications') == null && Notification.permission == "granted"){
-      localStorage.setItem('enhancednotifications', 'true');
-    }
     //Dark theme options
     var darkstart=Number(JSON.parse(localStorage.getItem('darkstart')));
     var darkend=Number(JSON.parse(localStorage.getItem('darkend')));
@@ -162,8 +158,6 @@ background: url('https://i.imgur.com/eklsU6V.png') !important;
                 },1000);
               }
             }
-            //Disable idle monitor
-            AoPS.Community.Constants.idle_monitor_interval=0;
             //Add custom stylesheet
             var sheet=document.createElement('style');
             sheet.innerHTML=`

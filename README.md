@@ -6,7 +6,6 @@ AoPS Enhanced is a userscript for artofproblemsolving.com intended to be user fr
 Quoting links back to the original post.<br>
 Click post number to copy the url of the post.<br>
 Replace flyouts with browser notifications.\*<br>
-Disable idle monitor (Prevents community falling asleep).<br>
 Moderate topics from the feed.<br>
 Add custom tags to autotagging.\*<br>
 Read messages deleted while on topic.<br>
