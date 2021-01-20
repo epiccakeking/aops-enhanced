@@ -1,22 +1,9 @@
----
-name: Bug report
-about: Create a bug report.
-title: ''
-labels: bug
-assignees: ''
+<!---- Remember to start the title with `[Bug]`! ---->
 
----
+Steps to reproduce:
 
-What is the bug?
+Frequency:
 
-How can you reproduce the bug?
+Userscript manager, Browser, and OS:
 
-How often does the bug occur when reproducing the bug?
-
-What is your Operating System?
-
-What is your browser?
-
-Are you using Tampermonkey or Violentmonkey?
-
-Do you have any other information?
+Any other relevant info:
