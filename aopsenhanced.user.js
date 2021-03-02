@@ -1,12 +1,13 @@
 // ==UserScript==
 // @name         AoPS Enhanced
-// @namespace    http://tampermonkey.net/
-// @version      5.14.1
-// @description  try to take over the world!
+// @namespace    https://github.com/epiccakeking
+// @version      5.14.2
+// @description  Unofficial userscript for the Art of Problem Solving website.
 // @author       happycupcake/epiccakeking
 // @match        https://artofproblemsolving.com/*
 // @grant        none
-// @run-at document-start
+// @run-at       document-start
+// @license      MIT
 // ==/UserScript==
 
 (function() {
