@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         AoPS Enhanced
+// @name         AoPS Enhanced (forest)
 // @namespace    https://github.com/epiccakeking
 // @version      5.14.2
 // @description  Unofficial userscript for the Art of Problem Solving website.
