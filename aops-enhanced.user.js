@@ -3,7 +3,7 @@
 // @namespace   https://gitlab.com/epiccakeking
 // @match       https://artofproblemsolving.com/*
 // @grant       none
-// @version     5.99.1
+// @version     5.99.2
 // @author      epiccakeking
 // @description Work in progress AoPS Enhanced rewrite
 // @license     MIT
@@ -54,3 +54,10 @@ document.getElementsByClassName('login-dropdown-content')[0].appendChild(enhance
 
 
 AoPS.Community.Views.Post.prototype.onClickQuote = QUOTE_SCHEMES[get_enhanced_setting('enhanced_quote')];
+
+// Direct linking
+AoPS.Community.Views.Post.prototype.onClickDirectLink = function (e) {
+  let url = 'https://aops.com/community/p' + this.model.get("post_id");
+  navigator.clipboard.writeText(url);
+  AoPS.Ui.Flyout.display(`Url copied (${url})`);
+}
