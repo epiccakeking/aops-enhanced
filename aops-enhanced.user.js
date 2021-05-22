@@ -3,7 +3,7 @@
 // @namespace   https://gitlab.com/epiccakeking
 // @match       https://artofproblemsolving.com/*
 // @grant       none
-// @version     5.99.4
+// @version     5.99.5
 // @author      epiccakeking
 // @description Work in progress AoPS Enhanced rewrite
 // @license     MIT
@@ -16,8 +16,9 @@ const QUOTE_SCHEMES = {
 
 function get_enhanced_setting(setting) {
   let ENHANCED_DEFAULTS = {
-    'enhanced_notifications': true,
-    'enhanced_quote': 'enhanced',
+    enhanced_notifications: true,
+    enhanced_post_links: true,
+    enhanced_quote: 'enhanced',
   };
   let value = localStorage.getItem(setting);
   if (value === null) return ENHANCED_DEFAULTS[setting];
@@ -32,6 +33,7 @@ function show_enhanced_configurator() {
   // AoPS already has a decent HTML popup system, why reinvent the wheel.
   alert(`<form id='enhanced_settings'>
 <label><input name='enhanced_notifications' type='checkbox'> Notifications</label><br>
+<label><input name='enhanced_post_links' type='checkbox'> Easy post links</label><br>
 <label>Quote mode <select name='enhanced_quote'>
 <option value='aops'>AoPS Default/option>
 <option value='enhanced'>Enhanced</option>
@@ -66,9 +68,11 @@ if (AoPS.Community) {
   })(get_enhanced_setting('enhanced_quote'));
 
   // Direct linking
-  AoPS.Community.Views.Post.prototype.onClickDirectLink = function (e) {
-    let url = 'https://aops.com/community/p' + this.model.get("post_id");
-    navigator.clipboard.writeText(url);
-    AoPS.Ui.Flyout.display(`Url copied (${url})`);
+  if (get_enhanced_setting('enhanced_post_links')) {
+    AoPS.Community.Views.Post.prototype.onClickDirectLink = function (e) {
+      let url = 'https://aops.com/community/p' + this.model.get("post_id");
+      navigator.clipboard.writeText(url);
+      AoPS.Ui.Flyout.display(`Url copied (${url})`);
+    }
   }
 }
