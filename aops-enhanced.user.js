@@ -3,7 +3,7 @@
 // @namespace   https://gitlab.com/epiccakeking
 // @match       https://artofproblemsolving.com/*
 // @grant       none
-// @version     5.99.5
+// @version     5.99.6
 // @author      epiccakeking
 // @description Work in progress AoPS Enhanced rewrite
 // @license     MIT
@@ -66,6 +66,22 @@ if (AoPS.Community) {
   (quote_scheme => {
     if (quote_scheme != 'aops') AoPS.Community.Views.Post.prototype.onClickQuote = QUOTE_SCHEMES[quote_scheme];
   })(get_enhanced_setting('enhanced_quote'));
+
+  // Notifications
+  if (get_enhanced_setting('enhanced_notifications')) {
+    if (Notification.permission == 'granted') {
+      AoPS.Ui.Flyout.display = a => {
+        var textextract = document.createElement("div");
+        textextract.innerHTML = a.replace('<br>', '\n');
+        var y = $(textextract).text()
+        var notification = new Notification("AoPS Enhanced", { body: y, icon: 'https://artofproblemsolving.com/online-favicon.ico', tag: y });
+        setTimeout(notification.close.bind(notification), 5000);
+      }
+    } else {
+      setTimeout(()=>alert("Please grant permission to send notifications or turn off notifications at https://artofproblemsolving.com/enhancedsettings"), 1000)
+      document.onclick = () => Notification.requestPermission();
+    }
+  }
 
   // Direct linking
   if (get_enhanced_setting('enhanced_post_links')) {
