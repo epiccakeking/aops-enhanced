@@ -3,14 +3,13 @@
 // @namespace   https://gitlab.com/epiccakeking
 // @match       https://artofproblemsolving.com/*
 // @grant       none
-// @version     5.99.3
+// @version     5.99.4
 // @author      epiccakeking
 // @description Work in progress AoPS Enhanced rewrite
 // @license     MIT
 // ==/UserScript==
 
 const QUOTE_SCHEMES = {
-  'aops': AoPS.Community.Views.Post.prototype.onClickQuote,
   'enhanced': function () { this.topic.appendToReply("[quote name=\"" + this.model.get("username") + "\" url=\"/community/p" + this.model.get("post_id") + "\"]\n" + this.model.get("post_canonical").trim() + "\n[/quote]\n\n") },
   'link': function () { this.topic.appendToReply(`@[url=https://aops.com/community/p${this.model.get("post_id")}]${this.model.get("username")} (#${this.model.get("post_number")}):[/url]`); },
 };
@@ -50,18 +49,26 @@ function show_enhanced_configurator() {
   }
 }
 
-let enhanced_settings_element = document.createElement('a');
-enhanced_settings_element.classList.add('menu-item');
-enhanced_settings_element.innerText = 'Enhanced';
-enhanced_settings_element.addEventListener('click', e => { e.preventDefault(); show_enhanced_configurator(); });
-document.getElementsByClassName('login-dropdown-content')[0].appendChild(enhanced_settings_element);
+(el => {
+  if (el === null) return;
+  let enhanced_settings_element = document.createElement('a');
+  enhanced_settings_element.classList.add('menu-item');
+  enhanced_settings_element.innerText = 'Enhanced';
+  enhanced_settings_element.addEventListener('click', e => { e.preventDefault(); show_enhanced_configurator(); });
+  el.appendChild(enhanced_settings_element);
+})(document.querySelector('.login-dropdown-content'));
 
+// Prevent errors when trying to modify AoPS Community on pages where it doesn't exist
+if (AoPS.Community) {
+  // Quotes
+  (quote_scheme => {
+    if (quote_scheme != 'aops') AoPS.Community.Views.Post.prototype.onClickQuote = QUOTE_SCHEMES[quote_scheme];
+  })(get_enhanced_setting('enhanced_quote'));
 
-AoPS.Community.Views.Post.prototype.onClickQuote = QUOTE_SCHEMES[get_enhanced_setting('enhanced_quote')];
-
-// Direct linking
-AoPS.Community.Views.Post.prototype.onClickDirectLink = function (e) {
-  let url = 'https://aops.com/community/p' + this.model.get("post_id");
-  navigator.clipboard.writeText(url);
-  AoPS.Ui.Flyout.display(`Url copied (${url})`);
+  // Direct linking
+  AoPS.Community.Views.Post.prototype.onClickDirectLink = function (e) {
+    let url = 'https://aops.com/community/p' + this.model.get("post_id");
+    navigator.clipboard.writeText(url);
+    AoPS.Ui.Flyout.display(`Url copied (${url})`);
+  }
 }
