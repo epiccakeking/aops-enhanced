@@ -3,7 +3,7 @@
 // @namespace   https://gitlab.com/epiccakeking
 // @match       https://artofproblemsolving.com/*
 // @grant       none
-// @version     5.99.2
+// @version     5.99.3
 // @author      epiccakeking
 // @description Work in progress AoPS Enhanced rewrite
 // @license     MIT
@@ -12,6 +12,7 @@
 const QUOTE_SCHEMES = {
   'aops': AoPS.Community.Views.Post.prototype.onClickQuote,
   'enhanced': function () { this.topic.appendToReply("[quote name=\"" + this.model.get("username") + "\" url=\"/community/p" + this.model.get("post_id") + "\"]\n" + this.model.get("post_canonical").trim() + "\n[/quote]\n\n") },
+  'link': function () { this.topic.appendToReply(`@[url=https://aops.com/community/p${this.model.get("post_id")}]${this.model.get("username")} (#${this.model.get("post_number")}):[/url]`); },
 };
 
 function get_enhanced_setting(setting) {
@@ -35,13 +36,16 @@ function show_enhanced_configurator() {
 <label>Quote mode <select name='enhanced_quote'>
 <option value='aops'>AoPS Default/option>
 <option value='enhanced'>Enhanced</option>
+<option value='link'>Link</option>
 </select></label><br>
 </form>`);
   for (element of document.getElementById('enhanced_settings').querySelectorAll('[name^=enhanced_]')) {
     if (element.nodeName == 'INPUT' && element.getAttribute('type') == 'checkbox') {
       element.checked = get_enhanced_setting(element.getAttribute('name'));
+      element.addEventListener('change', e => set_enhanced_setting(e.target.getAttribute('name'), e.target.checked));
     } else {
       element.value = get_enhanced_setting(element.getAttribute('name'));
+      element.addEventListener('change', e => set_enhanced_setting(e.target.getAttribute('name'), e.target.value));
     }
   }
 }
