@@ -3,7 +3,7 @@ Notice: This is a work in progress rewrite. Do not expect this to work properly.
 
 ## To-do
 
-- [ ] Replace flyouts with browser notifications
+- [X] Replace flyouts with browser notifications
 - [X] Quotes
 - [X] Click post number to copy the url of the post
 - [ ] Moderators can edit in locked topics
