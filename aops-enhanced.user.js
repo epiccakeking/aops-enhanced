@@ -3,7 +3,7 @@
 // @namespace   https://gitlab.com/epiccakeking
 // @match       https://artofproblemsolving.com/*
 // @grant       none
-// @version     5.99.10
+// @version     5.99.11
 // @author      epiccakeking
 // @description Work in progress AoPS Enhanced rewrite
 // @license     MIT
@@ -22,21 +22,23 @@ ${this.model.get('post_canonical').trim()}
   },
 };
 
+var enhanced_settings = localStorage.getItem('enhanced_settings');
+enhanced_settings = enhanced_settings === null ? {} : JSON.parse(enhanced_settings);
+
 function get_enhanced_setting(setting) {
-  let ENHANCED_DEFAULTS = {
+  // Returns the setting if it is in the settings, otherwise uses a default
+  return setting in enhanced_settings ? enhanced_settings[setting] : {
     enhanced_notifications: true,
     enhanced_post_links: true,
     enhanced_feed_moderation: true,
     enhanced_quote: 'enhanced',
     enhanced_quote_secondary: 'enhanced',
-  };
-  let value = localStorage.getItem(setting);
-  if (value === null) return ENHANCED_DEFAULTS[setting];
-  return JSON.parse(value);
+  }[setting];
 }
 
 function set_enhanced_setting(setting, value) {
-  localStorage.setItem(setting, JSON.stringify(value))
+  enhanced_settings[setting] = value;
+  localStorage.setItem('enhanced_settings', JSON.stringify(enhanced_settings))
 }
 
 function show_enhanced_configurator() {
