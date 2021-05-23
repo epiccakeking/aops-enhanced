@@ -3,7 +3,7 @@
 // @namespace   https://gitlab.com/epiccakeking
 // @match       https://artofproblemsolving.com/*
 // @grant       none
-// @version     5.99.7
+// @version     5.99.8
 // @author      epiccakeking
 // @description Work in progress AoPS Enhanced rewrite
 // @license     MIT
@@ -26,6 +26,7 @@ function get_enhanced_setting(setting) {
   let ENHANCED_DEFAULTS = {
     enhanced_notifications: true,
     enhanced_post_links: true,
+    enhanced_feed_moderation: true,
     enhanced_quote: 'enhanced',
   };
   let value = localStorage.getItem(setting);
@@ -40,8 +41,10 @@ function set_enhanced_setting(setting, value) {
 function show_enhanced_configurator() {
   // AoPS already has a decent HTML popup system, why reinvent the wheel.
   alert(`<form id='enhanced_settings'>
+Changes will apply on refresh.<br>
 <label><input name='enhanced_notifications' type='checkbox'> Notifications</label><br>
 <label><input name='enhanced_post_links' type='checkbox'> Easy post links</label><br>
+<label><input name='enhanced_feed_moderation' type='checkbox'> Enable moderator buttons in feed</label><br>
 <label>Quote mode <select name='enhanced_quote'>
 <option value='aops'>AoPS Default/option>
 <option value='enhanced'>Enhanced</option>
@@ -68,6 +71,10 @@ function show_enhanced_configurator() {
   enhanced_settings_element.addEventListener('click', e => { e.preventDefault(); show_enhanced_configurator(); });
   el.appendChild(enhanced_settings_element);
 })(document.querySelector('.login-dropdown-content'));
+
+if (get_enhanced_setting('enhanced_feed_moderation')){
+  document.head.appendChild(document.createElement('style')).textContent = '#feed-topic .cmty-topic-moderate{ display: inline !important; }';
+}
 
 // Prevent errors when trying to modify AoPS Community on pages where it doesn't exist
 if (AoPS.Community) {
