@@ -3,7 +3,7 @@
 // @namespace   https://gitlab.com/epiccakeking
 // @match       https://artofproblemsolving.com/*
 // @grant       none
-// @version     5.99.9
+// @version     5.99.10
 // @author      epiccakeking
 // @description Work in progress AoPS Enhanced rewrite
 // @license     MIT
@@ -28,6 +28,7 @@ function get_enhanced_setting(setting) {
     enhanced_post_links: true,
     enhanced_feed_moderation: true,
     enhanced_quote: 'enhanced',
+    enhanced_quote_secondary: 'enhanced',
   };
   let value = localStorage.getItem(setting);
   if (value === null) return ENHANCED_DEFAULTS[setting];
@@ -46,6 +47,12 @@ Changes will apply on refresh.<br>
 <label><input name='enhanced_post_links' type='checkbox'> Easy post links</label><br>
 <label><input name='enhanced_feed_moderation' type='checkbox'> Enable moderator buttons in feed</label><br>
 <label>Quote mode <select name='enhanced_quote'>
+<option value='aops'>AoPS Default/option>
+<option value='enhanced'>Enhanced</option>
+<option value='link'>Link</option>
+<option value='hide'>Hide</option>
+</select></label><br>
+<label>Ctrl Quote mode <select name='enhanced_quote_secondary'>
 <option value='aops'>AoPS Default/option>
 <option value='enhanced'>Enhanced</option>
 <option value='link'>Link</option>
@@ -79,9 +86,9 @@ if (get_enhanced_setting('enhanced_feed_moderation')) {
 // Prevent errors when trying to modify AoPS Community on pages where it doesn't exist
 if (AoPS.Community) {
   // Quotes
-  (quote_scheme => {
-    if (quote_scheme != 'aops') AoPS.Community.Views.Post.prototype.onClickQuote = QUOTE_SCHEMES[quote_scheme];
-  })(get_enhanced_setting('enhanced_quote'));
+  AoPS.Community.Views.Post.prototype.onClickQuote = function (e) {
+    QUOTE_SCHEMES[get_enhanced_setting(e.ctrlKey ? 'enhanced_quote_secondary' : 'enhanced_quote')].call(this);
+  };
 
   // Notifications
   if (get_enhanced_setting('enhanced_notifications')) {
