@@ -7,7 +7,7 @@ Notice: This is a work in progress rewrite. Do not expect this to work properly.
 - [X] Quotes
 - [X] Click post number to copy the url of the post
 - [ ] Moderators can edit in locked topics
-- [ ] Moderators can moderate topics from the feed
+- [X] Moderators can moderate topics from the feed
 - [ ] Dark themes
 - [ ] Add custom tags to autotagging
 - [ ] Read messages deleted while on topic
