@@ -3,7 +3,7 @@
 // @namespace   https://gitlab.com/epiccakeking
 // @match       https://artofproblemsolving.com/*
 // @grant       none
-// @version     5.99.6
+// @version     5.99.7
 // @author      epiccakeking
 // @description Work in progress AoPS Enhanced rewrite
 // @license     MIT
@@ -12,6 +12,14 @@
 const QUOTE_SCHEMES = {
   enhanced: function () { this.topic.appendToReply("[quote name=\"" + this.model.get("username") + "\" url=\"/community/p" + this.model.get("post_id") + "\"]\n" + this.model.get("post_canonical").trim() + "\n[/quote]\n\n") },
   link: function () { this.topic.appendToReply(`@[url=https://aops.com/community/p${this.model.get("post_id")}]${this.model.get("username")} (#${this.model.get("post_number")}):[/url]`); },
+  hide: function () {
+    this.topic.appendToReply(`[hide=Post #${this.model.get("post_number")} by ${this.model.get("username")}]
+[url=https://aops.com/user/${this.model.get("poster_id")}]${this.model.get('username')}[/url] [url=https://aops.com/community/p${this.model.get("post_id")}](view original)[/url]
+${this.model.get('post_canonical').trim()}
+[/hide]
+
+`);
+  },
 };
 
 function get_enhanced_setting(setting) {
@@ -38,6 +46,7 @@ function show_enhanced_configurator() {
 <option value='aops'>AoPS Default/option>
 <option value='enhanced'>Enhanced</option>
 <option value='link'>Link</option>
+<option value='hide'>Hide</option>
 </select></label><br>
 </form>`);
   for (element of document.getElementById('enhanced_settings').querySelectorAll('[name^=enhanced_]')) {
@@ -78,7 +87,7 @@ if (AoPS.Community) {
         setTimeout(notification.close.bind(notification), 5000);
       }
     } else {
-      setTimeout(()=>alert("Please grant permission to send notifications or turn off notifications at https://artofproblemsolving.com/enhancedsettings"), 1000)
+      setTimeout(() => alert("Please grant permission to send notifications or turn off notifications at https://artofproblemsolving.com/enhancedsettings"), 1000)
       document.onclick = () => Notification.requestPermission();
     }
   }
