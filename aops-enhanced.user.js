@@ -3,25 +3,13 @@
 // @namespace   https://gitlab.com/epiccakeking
 // @match       https://artofproblemsolving.com/*
 // @grant       none
-// @version     5.99.11
+// @version     5.99.12
 // @author      epiccakeking
 // @description Work in progress AoPS Enhanced rewrite
 // @license     MIT
 // ==/UserScript==
 
-const QUOTE_SCHEMES = {
-  enhanced: function () { this.topic.appendToReply("[quote name=\"" + this.model.get("username") + "\" url=\"/community/p" + this.model.get("post_id") + "\"]\n" + this.model.get("post_canonical").trim() + "\n[/quote]\n\n") },
-  link: function () { this.topic.appendToReply(`@[url=https://aops.com/community/p${this.model.get("post_id")}]${this.model.get("username")} (#${this.model.get("post_number")}):[/url]`); },
-  hide: function () {
-    this.topic.appendToReply(`[hide=Post #${this.model.get("post_number")} by ${this.model.get("username")}]
-[url=https://aops.com/user/${this.model.get("poster_id")}]${this.model.get('username')}[/url] [url=https://aops.com/community/p${this.model.get("post_id")}](view original)[/url]
-${this.model.get('post_canonical').trim()}
-[/hide]
-
-`);
-  },
-};
-
+// Functions for managing settings
 var enhanced_settings = localStorage.getItem('enhanced_settings');
 enhanced_settings = enhanced_settings === null ? {} : JSON.parse(enhanced_settings);
 
@@ -72,6 +60,7 @@ Changes will apply on refresh.<br>
   }
 }
 
+// Add "Enhanced" option to login dropdown
 (el => {
   if (el === null) return;
   let enhanced_settings_element = document.createElement('a');
@@ -81,6 +70,7 @@ Changes will apply on refresh.<br>
   el.appendChild(enhanced_settings_element);
 })(document.querySelector('.login-dropdown-content'));
 
+// Add CSS for feed moderation if enabled
 if (get_enhanced_setting('enhanced_feed_moderation')) {
   document.head.appendChild(document.createElement('style')).textContent = '#feed-topic .cmty-topic-moderate{ display: inline !important; }';
 }
@@ -88,6 +78,19 @@ if (get_enhanced_setting('enhanced_feed_moderation')) {
 // Prevent errors when trying to modify AoPS Community on pages where it doesn't exist
 if (AoPS.Community) {
   // Quotes
+  const QUOTE_SCHEMES = {
+    aops: AoPS.Community.Views.Post.prototype.onClickQuote,
+    enhanced: function () { this.topic.appendToReply("[quote name=\"" + this.model.get("username") + "\" url=\"/community/p" + this.model.get("post_id") + "\"]\n" + this.model.get("post_canonical").trim() + "\n[/quote]\n\n") },
+    link: function () { this.topic.appendToReply(`@[url=https://aops.com/community/p${this.model.get("post_id")}]${this.model.get("username")} (#${this.model.get("post_number")}):[/url]`); },
+    hide: function () {
+      this.topic.appendToReply(`[hide=Post #${this.model.get("post_number")} by ${this.model.get("username")}]
+  [url=https://aops.com/user/${this.model.get("poster_id")}]${this.model.get('username')}[/url] [url=https://aops.com/community/p${this.model.get("post_id")}](view original)[/url]
+  ${this.model.get('post_canonical').trim()}
+  [/hide]
+
+  `);
+    },
+  };
   AoPS.Community.Views.Post.prototype.onClickQuote = function (e) {
     QUOTE_SCHEMES[get_enhanced_setting(e.ctrlKey ? 'enhanced_quote_secondary' : 'enhanced_quote')].call(this);
   };
