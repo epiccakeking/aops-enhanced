@@ -3,7 +3,7 @@
 // @namespace   https://gitlab.com/epiccakeking
 // @match       https://artofproblemsolving.com/*
 // @grant       none
-// @version     5.99.8
+// @version     5.99.9
 // @author      epiccakeking
 // @description Work in progress AoPS Enhanced rewrite
 // @license     MIT
@@ -72,7 +72,7 @@ Changes will apply on refresh.<br>
   el.appendChild(enhanced_settings_element);
 })(document.querySelector('.login-dropdown-content'));
 
-if (get_enhanced_setting('enhanced_feed_moderation')){
+if (get_enhanced_setting('enhanced_feed_moderation')) {
   document.head.appendChild(document.createElement('style')).textContent = '#feed-topic .cmty-topic-moderate{ display: inline !important; }';
 }
 
