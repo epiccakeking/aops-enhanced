@@ -1,5 +1,5 @@
 # AoPS Enhanced
-Notice: This is a work in progress rewrite. Do not expect this to work properly.
+Notice: This is a work in progress rewrite so things may break/change.
 
 ## To-do
 
