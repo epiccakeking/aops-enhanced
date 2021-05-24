@@ -3,7 +3,7 @@
 // @namespace   https://gitlab.com/epiccakeking
 // @match       https://artofproblemsolving.com/*
 // @grant       none
-// @version     5.99.12
+// @version     5.99.13
 // @author      epiccakeking
 // @description Work in progress AoPS Enhanced rewrite
 // @license     MIT
@@ -32,18 +32,18 @@ function set_enhanced_setting(setting, value) {
 function show_enhanced_configurator() {
   // AoPS already has a decent HTML popup system, why reinvent the wheel.
   alert(`<form id='enhanced_settings'>
-Changes will apply on refresh.<br>
+Some changes will not apply until the page is refreshed.<br>
 <label><input name='enhanced_notifications' type='checkbox'> Notifications</label><br>
 <label><input name='enhanced_post_links' type='checkbox'> Easy post links</label><br>
 <label><input name='enhanced_feed_moderation' type='checkbox'> Enable moderator buttons in feed</label><br>
 <label>Quote mode <select name='enhanced_quote'>
-<option value='aops'>AoPS Default/option>
+<option value='aops'>AoPS Default</option>
 <option value='enhanced'>Enhanced</option>
 <option value='link'>Link</option>
 <option value='hide'>Hide</option>
 </select></label><br>
 <label>Ctrl Quote mode <select name='enhanced_quote_secondary'>
-<option value='aops'>AoPS Default/option>
+<option value='aops'>AoPS Default</option>
 <option value='enhanced'>Enhanced</option>
 <option value='link'>Link</option>
 <option value='hide'>Hide</option>
