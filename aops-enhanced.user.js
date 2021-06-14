@@ -3,7 +3,7 @@
 // @namespace   https://gitlab.com/epiccakeking
 // @match       https://artofproblemsolving.com/*
 // @grant       none
-// @version     5.99.13
+// @version     5.99.14
 // @author      epiccakeking
 // @description Work in progress AoPS Enhanced rewrite
 // @license     MIT
@@ -16,11 +16,12 @@ enhanced_settings = enhanced_settings === null ? {} : JSON.parse(enhanced_settin
 function get_enhanced_setting(setting) {
   // Returns the setting if it is in the settings, otherwise uses a default
   return setting in enhanced_settings ? enhanced_settings[setting] : {
-    enhanced_notifications: true,
-    enhanced_post_links: true,
-    enhanced_feed_moderation: true,
-    enhanced_quote: 'enhanced',
-    enhanced_quote_secondary: 'enhanced',
+    notifications: true,
+    post_links: true,
+    feed_moderation: true,
+    quote_primary: 'enhanced',
+    quote_secondary: 'enhanced',
+    time_format: '',
   }[setting];
 }
 
@@ -33,23 +34,23 @@ function show_enhanced_configurator() {
   // AoPS already has a decent HTML popup system, why reinvent the wheel.
   alert(`<form id='enhanced_settings'>
 Some changes will not apply until the page is refreshed.<br>
-<label><input name='enhanced_notifications' type='checkbox'> Notifications</label><br>
-<label><input name='enhanced_post_links' type='checkbox'> Easy post links</label><br>
-<label><input name='enhanced_feed_moderation' type='checkbox'> Enable moderator buttons in feed</label><br>
-<label>Quote mode <select name='enhanced_quote'>
+<label><input name='notifications' type='checkbox'> Notifications</label><br>
+<label><input name='post_links' type='checkbox'> Easy post links</label><br>
+<label><input name='feed_moderation' type='checkbox'> Enable moderator buttons in feed</label><br>
+<label>Quote mode <select name='quote_primary'>
 <option value='aops'>AoPS Default</option>
 <option value='enhanced'>Enhanced</option>
 <option value='link'>Link</option>
 <option value='hide'>Hide</option>
 </select></label><br>
-<label>Ctrl Quote mode <select name='enhanced_quote_secondary'>
+<label>Ctrl Quote mode <select name='quote_secondary'>
 <option value='aops'>AoPS Default</option>
 <option value='enhanced'>Enhanced</option>
 <option value='link'>Link</option>
 <option value='hide'>Hide</option>
 </select></label><br>
 </form>`);
-  for (element of document.getElementById('enhanced_settings').querySelectorAll('[name^=enhanced_]')) {
+  for (element of document.getElementById('enhanced_settings').querySelectorAll('[name]')) {
     if (element.nodeName == 'INPUT' && element.getAttribute('type') == 'checkbox') {
       element.checked = get_enhanced_setting(element.getAttribute('name'));
       element.addEventListener('change', e => set_enhanced_setting(e.target.getAttribute('name'), e.target.checked));
@@ -71,7 +72,7 @@ Some changes will not apply until the page is refreshed.<br>
 })(document.querySelector('.login-dropdown-content'));
 
 // Add CSS for feed moderation if enabled
-if (get_enhanced_setting('enhanced_feed_moderation')) {
+if (get_enhanced_setting('feed_moderation')) {
   document.head.appendChild(document.createElement('style')).textContent = '#feed-topic .cmty-topic-moderate{ display: inline !important; }';
 }
 
@@ -92,11 +93,11 @@ if (AoPS.Community) {
     },
   };
   AoPS.Community.Views.Post.prototype.onClickQuote = function (e) {
-    QUOTE_SCHEMES[get_enhanced_setting(e.ctrlKey ? 'enhanced_quote_secondary' : 'enhanced_quote')].call(this);
+    QUOTE_SCHEMES[get_enhanced_setting(e.ctrlKey ? 'quote_secondary' : 'quote_primary')].call(this);
   };
 
   // Notifications
-  if (get_enhanced_setting('enhanced_notifications')) {
+  if (get_enhanced_setting('notifications')) {
     if (Notification.permission == 'granted') {
       AoPS.Ui.Flyout.display = a => {
         var textextract = document.createElement("div");
@@ -112,7 +113,7 @@ if (AoPS.Community) {
   }
 
   // Direct linking
-  if (get_enhanced_setting('enhanced_post_links')) {
+  if (get_enhanced_setting('post_links')) {
     AoPS.Community.Views.Post.prototype.onClickDirectLink = function (e) {
       let url = 'https://aops.com/community/p' + this.model.get("post_id");
       navigator.clipboard.writeText(url);
