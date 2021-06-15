@@ -3,32 +3,52 @@
 // @namespace   https://gitlab.com/epiccakeking
 // @match       https://artofproblemsolving.com/*
 // @grant       none
-// @version     5.99.14
+// @version     5.99.15
 // @author      epiccakeking
 // @description Work in progress AoPS Enhanced rewrite
 // @license     MIT
 // ==/UserScript==
 
-// Functions for managing settings
-var enhanced_settings = localStorage.getItem('enhanced_settings');
-enhanced_settings = enhanced_settings === null ? {} : JSON.parse(enhanced_settings);
-
-function get_enhanced_setting(setting) {
-  // Returns the setting if it is in the settings, otherwise uses a default
-  return setting in enhanced_settings ? enhanced_settings[setting] : {
+class EnhancedSettingsManager {
+  /** Default settings */
+  DEFAULTS = {
     notifications: true,
     post_links: true,
     feed_moderation: true,
     quote_primary: 'enhanced',
     quote_secondary: 'enhanced',
     time_format: '',
-  }[setting];
+  };
+
+  /**
+   * 
+   * @param {string} storage_variable
+   */
+  constructor(storage_variable) {
+    this.storage_variable = storage_variable
+    this._settings = (a => a === null ? {} : JSON.parse(a))(localStorage.getItem(this.storage_variable));
+  }
+
+  /**
+   * Retrieves a setting.
+   * @param {string} setting - Setting to retrieve
+   */
+  get(setting) {
+    return setting in this._settings ? this._settings[setting] : this.DEFAULTS[setting];
+  }
+
+  /**
+   * Sets a setting.
+   * @param {string} setting - Setting to change
+   * @param {*} value - Value to set
+   */
+  set(setting, value) {
+    this._settings[setting] = value;
+    localStorage.setItem(this.storage_variable, JSON.stringify(this._settings));
+  }
 }
 
-function set_enhanced_setting(setting, value) {
-  enhanced_settings[setting] = value;
-  localStorage.setItem('enhanced_settings', JSON.stringify(enhanced_settings))
-}
+let enhanced_settings = new EnhancedSettingsManager('enhanced_settings');
 
 function show_enhanced_configurator() {
   // AoPS already has a decent HTML popup system, why reinvent the wheel.
@@ -52,11 +72,11 @@ Some changes will not apply until the page is refreshed.<br>
 </form>`);
   for (element of document.getElementById('enhanced_settings').querySelectorAll('[name]')) {
     if (element.nodeName == 'INPUT' && element.getAttribute('type') == 'checkbox') {
-      element.checked = get_enhanced_setting(element.getAttribute('name'));
-      element.addEventListener('change', e => set_enhanced_setting(e.target.getAttribute('name'), e.target.checked));
+      element.checked = enhanced_settings.get(element.getAttribute('name'));
+      element.addEventListener('change', e => enhanced_settings.set(e.target.getAttribute('name'), e.target.checked));
     } else {
-      element.value = get_enhanced_setting(element.getAttribute('name'));
-      element.addEventListener('change', e => set_enhanced_setting(e.target.getAttribute('name'), e.target.value));
+      element.value = enhanced_settings.get(element.getAttribute('name'));
+      element.addEventListener('change', e => enhanced_settings.set(e.target.getAttribute('name'), e.target.value));
     }
   }
 }
@@ -72,7 +92,7 @@ Some changes will not apply until the page is refreshed.<br>
 })(document.querySelector('.login-dropdown-content'));
 
 // Add CSS for feed moderation if enabled
-if (get_enhanced_setting('feed_moderation')) {
+if (enhanced_settings.get('feed_moderation')) {
   document.head.appendChild(document.createElement('style')).textContent = '#feed-topic .cmty-topic-moderate{ display: inline !important; }';
 }
 
@@ -93,11 +113,11 @@ if (AoPS.Community) {
     },
   };
   AoPS.Community.Views.Post.prototype.onClickQuote = function (e) {
-    QUOTE_SCHEMES[get_enhanced_setting(e.ctrlKey ? 'quote_secondary' : 'quote_primary')].call(this);
+    QUOTE_SCHEMES[enhanced_settings.get(e.ctrlKey ? 'quote_secondary' : 'quote_primary')].call(this);
   };
 
   // Notifications
-  if (get_enhanced_setting('notifications')) {
+  if (enhanced_settings.get('notifications')) {
     if (Notification.permission == 'granted') {
       AoPS.Ui.Flyout.display = a => {
         var textextract = document.createElement("div");
@@ -113,7 +133,7 @@ if (AoPS.Community) {
   }
 
   // Direct linking
-  if (get_enhanced_setting('post_links')) {
+  if (enhanced_settings.get('post_links')) {
     AoPS.Community.Views.Post.prototype.onClickDirectLink = function (e) {
       let url = 'https://aops.com/community/p' + this.model.get("post_id");
       navigator.clipboard.writeText(url);
