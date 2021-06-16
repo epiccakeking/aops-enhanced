@@ -1,5 +1,10 @@
 # AoPS Enhanced
-Notice: This is a work in progress rewrite so things may break/change.
+Notice: This is a work in progress rewrite so things may break/change. This branch is not compatible with the master branch.
+
+## Installation
+
+1. Install <a href='https://violentmonkey.github.io/get-it/'>Violentmonkey</a>
+2. <a href='../../raw/6/aops-enhanced.user.js'>Click here</a>
 
 ## To-do
 
