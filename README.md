@@ -1,6 +1,7 @@
 # AoPS Enhanced
 Notice: This is a work in progress rewrite so things may break/change.
 This version uses a new configuration system and can be configured seperately from version 5 (though using both simultaneously is not advised).
+The older version is unlikely to recieve further updates but if you would like to install the old version, see <a href='https://github.com/epiccakeking/aops-enhanced/tree/5'>here</a>.
 
 ## Installation
 
