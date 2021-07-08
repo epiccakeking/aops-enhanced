@@ -1,5 +1,6 @@
 # AoPS Enhanced
-Notice: This is a work in progress rewrite so things may break/change. This branch is not compatible with the master branch.
+Notice: This is a work in progress rewrite so things may break/change.
+This version uses a new configuration system and can be configured seperately from version 5 (though using both simultaneously is not advised).
 
 ## Installation
 
