@@ -4,7 +4,7 @@ AoPS Enhanced is a userscript for artofproblemsolving.com intended to be user fr
 ## Installation
 
 1. Install either <a href='https://violentmonkey.github.io/get-it/'>Violentmonkey</a> or <a href='https://www.tampermonkey.net/'>Tampermonkey</a>
-2. <a href='../../raw/master/aopsenhanced.user.js'>Click here</a>
+2. <a href='../../raw/6/aopsenhanced.user.js'>Click here</a>
 
 ## Modifying
 
