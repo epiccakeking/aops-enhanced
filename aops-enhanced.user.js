@@ -21,7 +21,7 @@ class EnhancedSettingsManager {
   };
 
   /**
-   * 
+   *
    * @param {string} storage_variable
    */
   constructor(storage_variable) {
