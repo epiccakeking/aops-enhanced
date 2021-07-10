@@ -15,6 +15,7 @@ class EnhancedSettingsManager {
     notifications: true,
     post_links: true,
     feed_moderation: true,
+    kill_top: false,
     quote_primary: 'enhanced',
     quote_secondary: 'enhanced',
     time_format: '',
@@ -57,6 +58,7 @@ Some changes will not apply until the page is refreshed.<br>
 <label><input name='notifications' type='checkbox'> Notifications</label><br>
 <label><input name='post_links' type='checkbox'> Easy post links</label><br>
 <label><input name='feed_moderation' type='checkbox'> Enable moderator buttons in feed</label><br>
+<label><input name='kill_top' type='checkbox'> Simplify UI</label><br>
 <label>Quote mode <select name='quote_primary'>
 <option value='aops'>AoPS Default</option>
 <option value='enhanced'>Enhanced</option>
@@ -94,6 +96,51 @@ Some changes will not apply until the page is refreshed.<br>
 // Add CSS for feed moderation if enabled
 if (enhanced_settings.get('feed_moderation')) {
   document.head.appendChild(document.createElement('style')).textContent = '#feed-topic .cmty-topic-moderate{ display: inline !important; }';
+}
+if (enhanced_settings.get('kill_top')) {
+  const loginwrap = document.getElementsByClassName('menu-login-wrapper')[0];
+  loginwrap.id = 'loginwrap';
+  document.getElementById('header-wrapper').before(loginwrap);
+  document.head.appendChild(document.createElement('style')).textContent = `
+  #header-wrapper #header {
+    margin-top: 0px;
+    display: none !important;
+  }
+  #header-wrapper #header.visible-faded {
+    display: block !important;
+    position: absolute;
+    z-index: 5000;
+    opacity: 0.7;
+  }
+  #header-wrapper #header.visible-bright {
+    display: block !important;
+    position: absolute;
+    z-index: 5000;
+  }
+  #loginwrap {
+    position: absolute;
+    z-index: 10000;
+    top: 0;
+    right: 0;
+    background: #dedede;
+  }
+  #small-footer-wrapper {
+    display: none !important;
+  }
+  `;
+  const header = document.getElementById('header');
+  loginwrap.onmouseenter = () => {
+    header.classList.add('visible-faded');
+  };
+  loginwrap.onmouseleave = () => {
+    window.setTimeout(() => { header.classList.remove('visible-faded'); }, 150);
+  };
+  header.onmouseenter = () => {
+    header.classList.add('visible-bright');
+  };
+  header.onmouseleave = () => {
+    window.setTimeout(() => { header.classList.remove('visible-bright'); }, 150);
+  };
 }
 
 // Prevent errors when trying to modify AoPS Community on pages where it doesn't exist
