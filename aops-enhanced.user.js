@@ -105,6 +105,7 @@ if (enhanced_settings.get('kill_top')) {
   #header-wrapper #header {
     margin-top: 0px;
     display: none !important;
+    transition: none !important;
   }
   #header-wrapper #header.visible-faded {
     display: block !important;
@@ -122,7 +123,9 @@ if (enhanced_settings.get('kill_top')) {
     z-index: 10000;
     top: 0;
     right: 0;
-    background: #dedede;
+  }
+  .mediawiki .menu-login-item, .online .menu-login-item {
+    color: #dedede;
   }
   #small-footer-wrapper {
     display: none !important;
