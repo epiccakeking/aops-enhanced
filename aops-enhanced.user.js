@@ -190,4 +190,15 @@ if (AoPS.Community) {
       AoPS.Ui.Flyout.display(`Url copied (${url})`);
     }
   }
+  
+  // Adds RSS icon to blogs
+  if(AoPS.Community.Views.BlogStats) { // if page is a blog
+    window.addEventListener('load', function() {  // wait until js loads
+      let blog_id = RegExp("(^https://artofproblemsolving.com/community/c)(\\d{3,})(?:\\s+(.*))?").exec(window.location.href)[2]; 
+      let link = "https://aops-rss.herokuapp.com/" + blog_id;
+      document.getElementsByClassName("user-full")[0].innerHTML += `<a href=${link}><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" style="vertical-align: middle; margin-bottom: 2px" fill="currentColor" class="bi bi-rss-fill" viewBox="0 0 16 16">
+      <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm1.5 2.5c5.523 0 10 4.477 10 10a1 1 0 1 1-2 0 8 8 0 0 0-8-8 1 1 0 0 1 0-2zm0 4a6 6 0 0 1 6 6 1 1 0 1 1-2 0 4 4 0 0 0-4-4 1 1 0 0 1 0-2zm.5 7a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+    </svg></a>`; 
+    }, false);
+  } 
 }
