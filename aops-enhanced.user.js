@@ -143,7 +143,7 @@ enhanced_settings.add_hook('kill_top', (() => {
 }
 .login-dropdown-content {
   padding: 12px 12px 12px !important;
-  margin-top: 2px;
+  border-top: 2.4px #009fad solid;
 }
 `;
   return value => {
