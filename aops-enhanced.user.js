@@ -15,7 +15,7 @@ let settings_ui = {
     let checkbox_label = document.createElement('label');
     let checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
-    checkbox.id = name;
+    checkbox.name = name;
     checkbox.checked = value;
     checkbox.addEventListener('change', e => settings_manager.set(name, e.target.checked));
     checkbox_label.appendChild(checkbox);
@@ -26,7 +26,7 @@ let settings_ui = {
     let select_label = document.createElement('label');
     select_label.innerText = label + ' ';
     let select = document.createElement('select');
-    select.id = name;
+    select.name = name;
     for (let option of options) {
       let option_element = document.createElement('option');
       option_element.value = option[0];
@@ -52,12 +52,12 @@ class EnhancedSettingsManager {
   };
 
   /**
-   *
-   * @param {string} storage_variable
+   * Constructor
+   * @param {string} storage_variable - Variable to use when reading or writing settings
    */
   constructor(storage_variable) {
-    this.storage_variable = storage_variable
-    this._settings = (a => a === null ? {} : JSON.parse(a))(localStorage.getItem(this.storage_variable));
+    this.storage_variable = storage_variable;
+    this._settings = JSON.parse(localStorage.getItem(this.storage_variable) || '{}');
     this.hooks = {};
   }
 
@@ -65,9 +65,7 @@ class EnhancedSettingsManager {
    * Retrieves a setting.
    * @param {string} setting - Setting to retrieve
    */
-  get(setting) {
-    return setting in this._settings ? this._settings[setting] : this.DEFAULTS[setting];
-  }
+  get = setting => setting in this._settings ? this._settings[setting] : this.DEFAULTS[setting];
 
   /**
    * Sets a setting.
@@ -78,9 +76,7 @@ class EnhancedSettingsManager {
     this._settings[setting] = value;
     localStorage.setItem(this.storage_variable, JSON.stringify(this._settings));
     // Run hooks
-    if (setting in this.hooks) {
-      for (let hook of this.hooks[setting]) hook(value);
-    }
+    if (setting in this.hooks) for (let hook of this.hooks[setting]) hook(value);
   }
 
   /**
@@ -90,14 +86,8 @@ class EnhancedSettingsManager {
    * @param {boolean} run_on_add - Whether to immediately run the hook
    */
   add_hook(setting, callback, run_on_add = false) {
-    if (setting in this.hooks) {
-      this.hooks[setting].push(callback);
-    } else {
-      this.hooks[setting] = [callback];
-    }
-    if (run_on_add) {
-      callback(this.get(setting));
-    }
+    setting in this.hooks ? this.hooks[setting].push(callback) : this.hooks[setting] = [callback];
+    if (run_on_add) callback(this.get(setting));
   }
 
   // No functions for removing hooks, do it manually by modifying the hooks attribute.
