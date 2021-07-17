@@ -138,6 +138,13 @@ enhanced_settings.add_hook('kill_top', (() => {
 #small-footer-wrapper {
   display: none !important;
 }
+.login-dropdown-divider {
+  display:none !important;
+}
+.login-dropdown-content {
+  padding: 12px 12px 12px !important;
+  border-top: 2.4px #009fad solid;
+}
 `;
   return value => {
     if (value) {
