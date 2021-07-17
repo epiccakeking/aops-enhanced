@@ -5,7 +5,7 @@ This userscript is not created by, endorsed by, or otherwise affiliated with Art
 ## Installation
 
 1. Install [Violentmonkey](https://violentmonkey.github.io/get-it/)
-2. [Click here](../../raw/6/aops-enhanced.user.js)
+2. [Click here](aops-enhanced.user.js?raw=1)
 
 ## Contributing
 Please see [CONTRIBUTING.md](CONTRIBUTING.md) if you would like to contribute.
