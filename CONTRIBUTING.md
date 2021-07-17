@@ -4,6 +4,9 @@ If you would like to contribute, here's some information about the project:
 ## Guidelines on implementing features
 If you would like to implement a new feature, here are some things to keep in mind:
 
+### Use the devel branch as your basis
+For future contributions the devel branch will now be used so changes can be made before merging into the main branch.
+
 ### Use hooks
 AoPS Enhanced has a feature called hooks that makes it easier to create features that instantly toggle on and off.
 Your feature should generally be of the form of a IIFE that returns a function, passed to enhanced_settings.add_hook.
