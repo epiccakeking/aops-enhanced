@@ -1,11 +1,11 @@
 // ==UserScript==
-// @name        AoPS Enhanced (WIP Rewrite)
+// @name        AoPS Enhanced 6
 // @namespace   https://gitlab.com/epiccakeking
 // @match       https://artofproblemsolving.com/*
 // @grant       none
-// @version     5.99.19
+// @version     6.0.0
 // @author      epiccakeking
-// @description Work in progress AoPS Enhanced rewrite
+// @description AoPS Enhanced adds and improves various features of the AoPS website.
 // @license     MIT
 // ==/UserScript==
 
