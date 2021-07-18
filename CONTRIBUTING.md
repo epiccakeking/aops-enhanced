@@ -1,6 +1,15 @@
 # Contributing
 If you would like to contribute, here's some information about the project:
 
+## Guidelines on suggesting new features
+If you would like to suggest a feature, feel free to do so! Don't be afraid to make suggestions
+Even if you lack the technical skills to implement, you can use the GitHub issue tracker to make a request for a new feature.
+If you do create an issue, make sure to be descriptive.
+The more information you give the better others can understand what you are asking for.
+
+## Filing bug reports 
+If you encounter a bug, please open an issue on GitHub.
+
 ## Guidelines on implementing features
 If you would like to implement a new feature, here are some things to keep in mind:
 
