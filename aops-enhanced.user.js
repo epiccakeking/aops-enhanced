@@ -3,7 +3,7 @@
 // @namespace   https://gitlab.com/epiccakeking
 // @match       https://artofproblemsolving.com/*
 // @grant       none
-// @version     6.0.0
+// @version     6.0.1
 // @author      epiccakeking
 // @description AoPS Enhanced adds and improves various features of the AoPS website.
 // @license     MIT
@@ -163,7 +163,7 @@ enhanced_settings.add_hook('feed_moderation', (() => {
 
 // Notifications
 enhanced_settings.add_hook('notifications', (() => {
-  let notify_functions = (
+  let notify_functions = [
     AoPS.Ui.Flyout.display,
     a => {
       var textextract = document.createElement("div");
@@ -172,7 +172,7 @@ enhanced_settings.add_hook('notifications', (() => {
       var notification = new Notification("AoPS Enhanced", { body: y, icon: 'https://artofproblemsolving.com/online-favicon.ico', tag: y });
       setTimeout(notification.close.bind(notification), 5000);
     }
-  );
+  ];
   return value => {
     if (value && Notification.permission != "granted") Notification.requestPermission();
     AoPS.Ui.Flyout.display = notify_functions[+value];
