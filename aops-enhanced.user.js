@@ -3,7 +3,7 @@
 // @namespace   https://gitlab.com/epiccakeking
 // @match       https://artofproblemsolving.com/*
 // @grant       none
-// @version     6.0.1a1
+// @version     6.0.1a2
 // @author      epiccakeking
 // @description AoPS Enhanced adds and improves various features of the AoPS website.
 // @license     MIT
@@ -45,6 +45,20 @@ let themes = {
   'PLACEHOLDER': '*{color: red}',
 }
 
+let quote_schemes = {
+  'AoPS': AoPS.Community.Views.Post.prototype.onClickQuote,
+  'Enhanced': function () { this.topic.appendToReply("[quote name=\"" + this.model.get("username") + "\" url=\"/community/p" + this.model.get("post_id") + "\"]\n" + this.model.get("post_canonical").trim() + "\n[/quote]\n\n") },
+  'Link': function () { this.topic.appendToReply(`@[url=https://aops.com/community/p${this.model.get("post_id")}]${this.model.get("username")} (#${this.model.get("post_number")}):[/url]`); },
+  'Hide': function () {
+    this.topic.appendToReply(`[hide=Post #${this.model.get("post_number")} by ${this.model.get("username")}]
+[url=https://aops.com/user/${this.model.get("poster_id")}]${this.model.get('username')}[/url] [url=https://aops.com/community/p${this.model.get("post_id")}](view original)[/url]
+${this.model.get('post_canonical').trim()}
+[/hide]
+
+`);
+  },
+};
+
 class EnhancedSettingsManager {
   /** Default settings */
   DEFAULTS = {
@@ -52,8 +66,8 @@ class EnhancedSettingsManager {
     post_links: true,
     feed_moderation: true,
     kill_top: false,
-    quote_primary: 'enhanced',
-    quote_secondary: 'enhanced',
+    quote_primary: 'Enhanced',
+    quote_secondary: 'Enhanced',
     theme: 'None',
   };
 
@@ -100,6 +114,11 @@ class EnhancedSettingsManager {
 }
 
 let enhanced_settings = new EnhancedSettingsManager('enhanced_settings');
+// Old settings adapter
+for (let setting of ['quote_primary', 'quote_secondary']){
+  let setting_value = enhanced_settings.get(setting);
+  if (setting_value.toLowerCase() == setting_value) enhanced_settings.set(setting, setting_value[0].toUpperCase() + setting_value.slice(1));
+}
 
 // Themes
 enhanced_settings.add_hook('theme', (() => {
@@ -198,19 +217,13 @@ enhanced_settings.add_hook('notifications', (() => {
 })(), true);
 
 function show_enhanced_configurator() {
-  const QUOTE_SCHEME_NAMES = {
-    aops: 'AoPS',
-    enhanced: 'Enhanced',
-    link: 'Link',
-    hide: 'Hide',
-  };
   UI_ELEMENTS = {
     notifications: settings_ui.toggle('Notifications'),
     post_links: settings_ui.toggle('Post links'),
     feed_moderation: settings_ui.toggle('Feed moderate icon'),
     kill_top: settings_ui.toggle('Simplify UI'),
-    quote_primary: settings_ui.select('Primary quote', Object.entries(QUOTE_SCHEME_NAMES)),
-    quote_secondary: settings_ui.select('Ctrl quote', Object.entries(QUOTE_SCHEME_NAMES)),
+    quote_primary: settings_ui.select('Primary quote', Object.keys(quote_schemes).map(k => [k, k])),
+    quote_secondary: settings_ui.select('Ctrl quote', Object.keys(quote_schemes).map(k => [k, k])),
     theme: settings_ui.select('Theme', Object.keys(themes).map(k => [k, k])),
   }
   let settings_modal = document.createElement('div');
@@ -233,20 +246,6 @@ function show_enhanced_configurator() {
 
 // Prevent errors when trying to modify AoPS Community on pages where it doesn't exist
 if (AoPS.Community) {
-  // Quotes
-  const QUOTE_SCHEMES = {
-    aops: AoPS.Community.Views.Post.prototype.onClickQuote,
-    enhanced: function () { this.topic.appendToReply("[quote name=\"" + this.model.get("username") + "\" url=\"/community/p" + this.model.get("post_id") + "\"]\n" + this.model.get("post_canonical").trim() + "\n[/quote]\n\n") },
-    link: function () { this.topic.appendToReply(`@[url=https://aops.com/community/p${this.model.get("post_id")}]${this.model.get("username")} (#${this.model.get("post_number")}):[/url]`); },
-    hide: function () {
-      this.topic.appendToReply(`[hide=Post #${this.model.get("post_number")} by ${this.model.get("username")}]
-[url=https://aops.com/user/${this.model.get("poster_id")}]${this.model.get('username')}[/url] [url=https://aops.com/community/p${this.model.get("post_id")}](view original)[/url]
-${this.model.get('post_canonical').trim()}
-[/hide]
-
-`);
-    },
-  };
   AoPS.Community.Views.Post.prototype.onClickQuote = function (e) {
     QUOTE_SCHEMES[enhanced_settings.get(e.ctrlKey ? 'quote_secondary' : 'quote_primary')].call(this);
   };
