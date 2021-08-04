@@ -3,7 +3,7 @@
 // @namespace   https://gitlab.com/epiccakeking
 // @match       https://artofproblemsolving.com/*
 // @grant       none
-// @version     6.0.1
+// @version     6.0.1a1
 // @author      epiccakeking
 // @description AoPS Enhanced adds and improves various features of the AoPS website.
 // @license     MIT
@@ -40,6 +40,11 @@ let settings_ui = {
   },
 }
 
+let themes = {
+  'None': '',
+  'PLACEHOLDER': '*{color: red}',
+}
+
 class EnhancedSettingsManager {
   /** Default settings */
   DEFAULTS = {
@@ -49,6 +54,7 @@ class EnhancedSettingsManager {
     kill_top: false,
     quote_primary: 'enhanced',
     quote_secondary: 'enhanced',
+    theme: 'None',
   };
 
   /**
@@ -94,6 +100,18 @@ class EnhancedSettingsManager {
 }
 
 let enhanced_settings = new EnhancedSettingsManager('enhanced_settings');
+
+// Themes
+enhanced_settings.add_hook('theme', (() => {
+  let theme_element = document.createElement('style');
+  return value => {
+    theme_element.textContent = themes[value];
+    if (value != 'None') {
+      document.head.appendChild(theme_element);
+    } else if (theme_element.parentNode) theme_element.parentNode.removeChild(theme_element);
+    window.dispatchEvent(new Event('resize')); // Recalculate sizes of elements
+  };
+})(), true);
 
 // Simplified header
 enhanced_settings.add_hook('kill_top', (() => {
@@ -193,6 +211,7 @@ function show_enhanced_configurator() {
     kill_top: settings_ui.toggle('Simplify UI'),
     quote_primary: settings_ui.select('Primary quote', Object.entries(QUOTE_SCHEME_NAMES)),
     quote_secondary: settings_ui.select('Ctrl quote', Object.entries(QUOTE_SCHEME_NAMES)),
+    theme: settings_ui.select('Theme', Object.keys(themes).map(k => [k, k])),
   }
   let settings_modal = document.createElement('div');
   for (let key in UI_ELEMENTS) {
