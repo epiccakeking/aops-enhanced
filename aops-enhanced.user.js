@@ -3,7 +3,7 @@
 // @namespace   https://gitlab.com/epiccakeking
 // @match       https://artofproblemsolving.com/*
 // @grant       none
-// @version     6.0.1a3
+// @version     6.0.1a4
 // @author      epiccakeking
 // @description AoPS Enhanced adds and improves various features of the AoPS website.
 // @license     MIT
@@ -85,7 +85,7 @@ class EnhancedSettingsManager {
    * Retrieves a setting.
    * @param {string} setting - Setting to retrieve
    */
-  get = setting => setting in this._settings ? this._settings[setting] : this.DEFAULTS[setting];
+  get = setting => (setting in this._settings ? this._settings : this.DEFAULTS)[setting];
 
   /**
    * Sets a setting.
