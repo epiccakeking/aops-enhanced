@@ -3,7 +3,7 @@
 // @namespace   https://gitlab.com/epiccakeking
 // @match       https://artofproblemsolving.com/*
 // @grant       none
-// @version     6.0.1a5
+// @version     6.0.1a6
 // @author      epiccakeking
 // @description AoPS Enhanced adds and improves various features of the AoPS website.
 // @license     MIT
@@ -52,6 +52,15 @@ let themes = {
 .cmty-posting-button-row{
   height: min-content !important;
   display: flow-root;
+}
+#feed-wrapper{
+  display: inline;
+}
+#feed-topic{
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 `,
 }
