@@ -3,7 +3,7 @@
 // @namespace   https://gitlab.com/epiccakeking
 // @match       https://artofproblemsolving.com/*
 // @grant       none
-// @version     6.0.1
+// @version     6.1.0
 // @author      epiccakeking
 // @description AoPS Enhanced adds and improves various features of the AoPS website.
 // @license     MIT
@@ -40,6 +40,80 @@ let settings_ui = {
   },
 }
 
+let themes = {
+  'None': '',
+  'PLACEHOLDER': '*{color: red}',
+  'Mobile': `
+.cmty-bbcode-buttons{
+  display: block;
+  height: auto;
+  width: auto !important;
+}
+.cmty-posting-button-row{
+  height: min-content !important;
+  display: flow-root;
+}
+#feed-wrapper{
+  display: inline;
+}
+#feed-topic{
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.cmty-no-tablet{
+  display: inline !important;
+}
+#feed-topic .cmty-topic-jump{
+  position: fixed;
+  top: 32px;
+  bottom: auto;
+  left: auto;
+  right: 10px;
+  z-index: 1000;
+  font-size: 24px;
+}
+#feed-topic .cmty-topic-jump-top{
+  right: 40px;
+}
+.cmty-upload-modal{
+  display: inline;
+}
+.aops-modal-body{
+  width: 100% !important;
+}
+
+#feed-tabs .cmty-postbox-inner-box{
+  width: 100% !important;
+  max-width: none !important;
+}
+
+#feed-topic .cmty-topic-posts-outer-wrapper > .aops-scroll-outer > .aops-scroll-inner {
+  left: 0;
+  width: 100% !important;
+}
+
+#feed-topic .cmty-postbox-inner-box {
+  max-width: 100% !important;
+}
+`,
+}
+
+let quote_schemes = {
+  'AoPS': AoPS.Community.Views.Post.prototype.onClickQuote,
+  'Enhanced': function () { this.topic.appendToReply("[quote name=\"" + this.model.get("username") + "\" url=\"/community/p" + this.model.get("post_id") + "\"]\n" + this.model.get("post_canonical").trim() + "\n[/quote]\n\n") },
+  'Link': function () { this.topic.appendToReply(`@[url=https://aops.com/community/p${this.model.get("post_id")}]${this.model.get("username")} (#${this.model.get("post_number")}):[/url]`); },
+  'Hide': function () {
+    this.topic.appendToReply(`[hide=Post #${this.model.get("post_number")} by ${this.model.get("username")}]
+[url=https://aops.com/community/user/${this.model.get("poster_id")}]${this.model.get('username')}[/url] [url=https://aops.com/community/p${this.model.get("post_id")}](view original)[/url]
+${this.model.get('post_canonical').trim()}
+[/hide]
+
+`);
+  },
+};
+
 class EnhancedSettingsManager {
   /** Default settings */
   DEFAULTS = {
@@ -47,8 +121,9 @@ class EnhancedSettingsManager {
     post_links: true,
     feed_moderation: true,
     kill_top: false,
-    quote_primary: 'enhanced',
-    quote_secondary: 'enhanced',
+    quote_primary: 'Enhanced',
+    quote_secondary: 'Enhanced',
+    theme: 'None',
   };
 
   /**
@@ -65,7 +140,7 @@ class EnhancedSettingsManager {
    * Retrieves a setting.
    * @param {string} setting - Setting to retrieve
    */
-  get = setting => setting in this._settings ? this._settings[setting] : this.DEFAULTS[setting];
+  get = setting => (setting in this._settings ? this._settings : this.DEFAULTS)[setting];
 
   /**
    * Sets a setting.
@@ -94,6 +169,23 @@ class EnhancedSettingsManager {
 }
 
 let enhanced_settings = new EnhancedSettingsManager('enhanced_settings');
+// Old settings adapter
+for (let setting of ['quote_primary', 'quote_secondary']){
+  let setting_value = enhanced_settings.get(setting);
+  if (setting_value.toLowerCase() == setting_value) enhanced_settings.set(setting, setting_value[0].toUpperCase() + setting_value.slice(1));
+}
+
+// Themes
+enhanced_settings.add_hook('theme', (() => {
+  let theme_element = document.createElement('style');
+  return value => {
+    theme_element.textContent = themes[value];
+    if (value != 'None') {
+      document.head.appendChild(theme_element);
+    } else if (theme_element.parentNode) theme_element.parentNode.removeChild(theme_element);
+    window.dispatchEvent(new Event('resize')); // Recalculate sizes of elements
+  };
+})(), true);
 
 // Simplified header
 enhanced_settings.add_hook('kill_top', (() => {
@@ -180,19 +272,14 @@ enhanced_settings.add_hook('notifications', (() => {
 })(), true);
 
 function show_enhanced_configurator() {
-  const QUOTE_SCHEME_NAMES = {
-    aops: 'AoPS',
-    enhanced: 'Enhanced',
-    link: 'Link',
-    hide: 'Hide',
-  };
   UI_ELEMENTS = {
     notifications: settings_ui.toggle('Notifications'),
     post_links: settings_ui.toggle('Post links'),
     feed_moderation: settings_ui.toggle('Feed moderate icon'),
     kill_top: settings_ui.toggle('Simplify UI'),
-    quote_primary: settings_ui.select('Primary quote', Object.entries(QUOTE_SCHEME_NAMES)),
-    quote_secondary: settings_ui.select('Ctrl quote', Object.entries(QUOTE_SCHEME_NAMES)),
+    quote_primary: settings_ui.select('Primary quote', Object.keys(quote_schemes).map(k => [k, k])),
+    quote_secondary: settings_ui.select('Ctrl quote', Object.keys(quote_schemes).map(k => [k, k])),
+    theme: settings_ui.select('Theme', Object.keys(themes).map(k => [k, k])),
   }
   let settings_modal = document.createElement('div');
   for (let key in UI_ELEMENTS) {
@@ -214,22 +301,8 @@ function show_enhanced_configurator() {
 
 // Prevent errors when trying to modify AoPS Community on pages where it doesn't exist
 if (AoPS.Community) {
-  // Quotes
-  const QUOTE_SCHEMES = {
-    aops: AoPS.Community.Views.Post.prototype.onClickQuote,
-    enhanced: function () { this.topic.appendToReply("[quote name=\"" + this.model.get("username") + "\" url=\"/community/p" + this.model.get("post_id") + "\"]\n" + this.model.get("post_canonical").trim() + "\n[/quote]\n\n") },
-    link: function () { this.topic.appendToReply(`@[url=https://aops.com/community/p${this.model.get("post_id")}]${this.model.get("username")} (#${this.model.get("post_number")}):[/url]`); },
-    hide: function () {
-      this.topic.appendToReply(`[hide=Post #${this.model.get("post_number")} by ${this.model.get("username")}]
-[url=https://aops.com/user/${this.model.get("poster_id")}]${this.model.get('username')}[/url] [url=https://aops.com/community/p${this.model.get("post_id")}](view original)[/url]
-${this.model.get('post_canonical').trim()}
-[/hide]
-
-`);
-    },
-  };
   AoPS.Community.Views.Post.prototype.onClickQuote = function (e) {
-    QUOTE_SCHEMES[enhanced_settings.get(e.ctrlKey ? 'quote_secondary' : 'quote_primary')].call(this);
+    quote_schemes[enhanced_settings.get(e.ctrlKey ? 'quote_secondary' : 'quote_primary')].call(this);
   };
 
   // Direct links
