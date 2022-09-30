@@ -7,6 +7,7 @@
 // @author      epiccakeking
 // @description AoPS Enhanced adds and improves various features of the AoPS website.
 // @license     MIT
+// @icon        https://artofproblemsolving.com/online-favicon.ico?v=2
 // ==/UserScript==
 
 // Functions for settings UI elements
