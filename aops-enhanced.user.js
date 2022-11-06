@@ -367,7 +367,7 @@ if (AoPS.Community) {
     function direct_link_function(e) {
       let url = 'https://aops.com/community/p' + this.model.get("post_id");
       navigator.clipboard.writeText(url);
-      AoPS.Ui.Flyout.display(`Url copied (${url})`);
+      AoPS.Ui.Flyout.display(`URL copied: ${url}`);
     }
     AoPS.Community.Views.Post.prototype.onClickDirectLink = function (e) {
       (enhanced_settings.get('post_links') ? direct_link_function : real_onClickDirectLink).call(this, e);
