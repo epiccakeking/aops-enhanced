@@ -145,7 +145,6 @@ background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAACsCAAAAAAbV
 }
 
 let quote_schemes = {
-  'AoPS': AoPS.Community.Views.Post.prototype.onClickQuote,
   'Enhanced': function () { this.topic.appendToReply("[quote name=\"" + this.model.get("username") + "\" url=\"/community/p" + this.model.get("post_id") + "\"]\n" + this.model.get("post_canonical").trim() + "\n[/quote]\n\n") },
   'Link': function () { this.topic.appendToReply(`@[url=https://aops.com/community/p${this.model.get("post_id")}]${this.model.get("username")} (#${this.model.get("post_number")}):[/url]`); },
   'Hide': function () {
@@ -157,6 +156,9 @@ ${this.model.get('post_canonical').trim()}
 `);
   },
 };
+if (AoPS.Community) {
+  quote_schemes['AoPS'] = AoPS.Community.Views.Post.prototype.onClickQuote;
+}
 
 class EnhancedSettingsManager {
   /** Default settings */
