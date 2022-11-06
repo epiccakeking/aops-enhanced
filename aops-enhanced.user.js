@@ -355,6 +355,19 @@ function show_enhanced_configurator() {
   el.appendChild(enhanced_settings_element);
 })(document.querySelector('.login-dropdown-content'));
 
+// Add "Enhanced" option to top
+(el => {
+  if (el === null) return;
+  let enhanced_settings_div = document.createElement('div');
+  enhanced_settings_div.classList.add('site');
+  let enhanced_settings_element = document.createElement('a');
+  enhanced_settings_element.style = "color: #f55;"
+  enhanced_settings_element.innerText = 'Enhanced Settings';
+  enhanced_settings_element.addEventListener('click', e => { e.preventDefault(); show_enhanced_configurator(); });
+  enhanced_settings_div.appendChild(enhanced_settings_element);
+  el.appendChild(enhanced_settings_div);
+})(document.querySelector('.sharedsite-links'));
+
 // Prevent errors when trying to modify AoPS Community on pages where it doesn't exist
 if (AoPS.Community) {
   AoPS.Community.Views.Post.prototype.onClickQuote = function (e) {
