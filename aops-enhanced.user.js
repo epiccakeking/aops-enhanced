@@ -165,6 +165,7 @@ class EnhancedSettingsManager {
     post_links: true,
     feed_moderation: true,
     kill_top: false,
+    copy_python: true,
     quote_primary: 'Enhanced',
     quote_secondary: 'Enhanced',
     theme: 'None',
@@ -312,6 +313,134 @@ for (let setting of ['quote_primary', 'quote_secondary']) {
   }, true)
 }
 
+//Python Copy Button
+window.onload = function () {
+  //on window load, check if feed tabs are clicked
+  document.getElementById("feed-tabs").onclick = function () {
+    let mList = document.getElementsByClassName(
+        "cmty-topics-list-inner-box"
+      )[0],
+      options = {
+        childList: true,
+      },
+      observer = new MutationObserver(mCallback);
+
+    function mCallback(mutations) {
+      for (let mutation of mutations) {
+        if (mutation.type === "childList") {
+          observeTopics();
+        }
+      }
+    }
+    observer.observe(mList, options);
+    //console.log("observing feed click");
+  };
+};
+function observeTopics() {
+  //when feed tabs are clicked or new topics in feed, run pythonmutationobserver function on topic click
+  for (
+    let i = 0;
+    i < document.getElementsByClassName("cmty-topic-cell").length;
+    i++
+  ) {
+    document
+      .getElementsByClassName("cmty-topic-cell")
+      [i].addEventListener("click", pythonMutationObserver);
+  }
+}
+function pythonMutationObserver() {
+  //when the attribute of the output div changes, run refreshPython
+  let mList = document.getElementsByClassName("cmty-postbox-inner-box")[0],
+    options = {
+      childList: true,
+    },
+    observer = new MutationObserver(mCallback);
+
+  function mCallback(mutations) {
+    for (let mutation of mutations) {
+      if (mutation.type === "childList") {
+        refreshPython();
+
+        console.log("found post!");
+      }
+    }
+  }
+  //console.log("observing postbox");
+  observer.observe(mList, options);
+
+  //for all python output boxes, check if the display changes
+  for (
+    let i = 0;
+    i < document.getElementsByClassName("active-out").length;
+    i++
+  ) {
+    mList = document.getElementsByClassName("active-out")[i];
+    observer.observe(mList, options);
+    //console.log("observing an active-out");
+  }
+}
+function refreshPython() {
+  //add or update button
+  enhanced_settings.add_hook(
+    "copy_python",
+    (() => {
+      //attributes
+      let copyButton = document.createElement("button");
+      copyButton.setAttribute("class", "btn btn-copy");
+      copyButton.setAttribute("type", "button");
+      copyButton.setAttribute("style", "margin-left: 0px; display: none;");
+      copyButton.textContent = "Copy";
+      //when the button is clicked
+      copyButton.setAttribute(
+        "onclick",
+        `let outputText =
+    this.parentNode.parentNode.querySelector(".active-out").textContent;
+  let outputArr = outputText.split(
+    ">>> =================== OUTPUT ===================\\n"
+  );
+  var copyText = outputArr[outputArr.length - 1].trim();
+  navigator.clipboard.writeText(copyText);
+  AoPS.Ui.Flyout.display(\`Copied "\${copyText}"\`);`
+      );
+      copyButton.textContent = "Copy";
+      //
+      if (!document.body.querySelector(".btn-copy")) {
+        document.body.appendChild(copyButton);
+      }
+      return (value) => {
+        if (value) {
+          //add button to all things
+          for (
+            let i = 0;
+            i < document.getElementsByClassName("pywindow").length;
+            i++
+          ) {
+            let temp =
+              document.getElementsByClassName("pywindow")[i].childNodes[1];
+            if (temp.querySelector(".btn-copy") == null) {
+              temp.insertBefore(copyButton.cloneNode(), temp.childNodes[2]);
+            }
+            //update the style and stuff
+            temp.childNodes[2].textContent = "Copy";
+            temp.childNodes[2].style.display = "block";
+          }
+        } else {
+          //delete buttons
+          if (copyButton.parentNode) {
+            let tempBtn = document.getElementsByClassName("btn-copy");
+            for (let j = 0; j < tempBtn.length; j++) {
+              if (tempBtn[j].parentNode) {
+                tempBtn[j].parentNode.removeChild(tempBtn[j]);
+              }
+            }
+          }
+        }
+      };
+    })(),
+    true
+  );
+}
+
 // Notifications
 {
   let notify_functions = [
@@ -337,6 +466,7 @@ function show_enhanced_configurator() {
     post_links: settings_ui.toggle('Post links'),
     feed_moderation: settings_ui.toggle('Feed moderate icon'),
     kill_top: settings_ui.toggle('Simplify UI'),
+    copy_python: settings_ui.toggle('Copy Python Output'),
     quote_primary: settings_ui.select('Primary quote', Object.keys(quote_schemes).map(k => [k, k])),
     quote_secondary: settings_ui.select('Ctrl quote', Object.keys(quote_schemes).map(k => [k, k])),
     theme: settings_ui.select('Theme', Object.keys(themes).map(k => [k, k])),
