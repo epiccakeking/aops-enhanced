@@ -46,7 +46,6 @@ In particular one of the things to be careful about is when AoPS.Community is no
 ### Implementing old features
 Here is a list of some features dropped/not yet implemented in v6 if you feel like implementing them.
 * Moderators can edit in locked topics
-* Dark themes
 * Add custom tags to autotagging
 * Read messages deleted while on topic
 * Filter out threads with titles matching custom phrases
