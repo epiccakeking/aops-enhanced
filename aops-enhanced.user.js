@@ -246,9 +246,11 @@ enhanced_settings.add_hook('theme', (() => {
 // Simplified header
 enhanced_settings.add_hook('kill_top', (() => {
   const menubar_wrapper = document.querySelector('.menubar-links-outer');
-  if (!menubar_wrapper) return _ => null;
+  const login_wrapper = document.querySelector('.menu-login-wrapper')
+  if (!(menubar_wrapper && login_wrapper)) return _ => null;
   let kill_element = document.createElement('style');
-  menubar_wrapper_normal_position = menubar_wrapper.nextSibling;
+  const menubar_wrapper_normal_position = menubar_wrapper.nextSibling;
+  const login_wrapper_normal_position = login_wrapper.nextSibling;
   kill_element.textContent = `
 #header {
   display: none !important;
@@ -283,13 +285,24 @@ enhanced_settings.add_hook('kill_top', (() => {
   padding: 12px 12px 12px !important;
   border-top: 2.4px #009fad solid;
 }
+
+.menu-login-wrapper .login-dropdown-label {
+  color: #606060;
+}
+
+.menu-login-wrapper {
+  height: 35px;
+  margin-bottom: -35px; /* Hack to  fix neighboring .site heights */
+}
 `;
   return value => {
     if (value) {
       document.getElementById('header-wrapper').before(menubar_wrapper);
+  document.querySelector('.sharedsite-links > .site:last-child').after(login_wrapper);
       document.head.appendChild(kill_element);
     } else {
       menubar_wrapper_normal_position.before(menubar_wrapper);
+      login_wrapper_normal_position.before(login_wrapper)
       if (kill_element.parentNode) kill_element.parentNode.removeChild(kill_element);
     }
     window.dispatchEvent(new Event('resize')); // Recalculate sizes of elements
