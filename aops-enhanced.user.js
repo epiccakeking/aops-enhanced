@@ -204,7 +204,7 @@ class EnhancedSettingsManager {
    * @param {function} callback - Callback to run when the setting is changed
    * @param {boolean} run_on_add - Whether to immediately run the hook
    */
-  add_hook(setting, callback, run_on_add = false) {
+  add_hook(setting, callback, run_on_add = true) {
     setting in this.hooks ? this.hooks[setting].push(callback) : this.hooks[setting] = [callback];
     if (run_on_add) callback(this.get(setting));
   }
@@ -220,31 +220,20 @@ for (let setting of ['quote_primary', 'quote_secondary']) {
 }
 
 // Themes
-enhanced_settings.add_hook('theme', (() => {
-  let theme_element = document.createElement('style');
-  return value => {
-    theme_element.textContent = themes[value];
-    if (value != 'None') {
-      document.head.appendChild(theme_element);
-    } else if (theme_element.parentNode) theme_element.parentNode.removeChild(theme_element);
-    window.dispatchEvent(new Event('resize')); // Recalculate sizes of elements
-  };
-})(), true);
+{
+  const theme_element = document.createElement('style');
 
-// Themes
-enhanced_settings.add_hook('theme', (() => {
-  let theme_element = document.createElement('style');
-  return value => {
+  enhanced_settings.add_hook('theme', value => {
     theme_element.textContent = themes[value];
     if (value != 'None') {
       document.head.appendChild(theme_element);
     } else if (theme_element.parentNode) theme_element.parentNode.removeChild(theme_element);
     window.dispatchEvent(new Event('resize')); // Recalculate sizes of elements
-  };
-})(), true);
+  });
+}
 
 // Simplified header
-enhanced_settings.add_hook('kill_top', (() => {
+{
   const menubar_wrapper = document.querySelector('.menubar-links-outer');
   const login_wrapper = document.querySelector('.menu-login-wrapper')
   if (!(menubar_wrapper && login_wrapper)) return _ => null;
@@ -295,10 +284,11 @@ enhanced_settings.add_hook('kill_top', (() => {
   margin-bottom: -35px; /* Hack to  fix neighboring .site heights */
 }
 `;
-  return value => {
+
+  enhanced_settings.add_hook('kill_top', value => {
     if (value) {
       document.getElementById('header-wrapper').before(menubar_wrapper);
-  document.querySelector('.sharedsite-links > .site:last-child').after(login_wrapper);
+      document.querySelector('.sharedsite-links > .site:last-child').after(login_wrapper);
       document.head.appendChild(kill_element);
     } else {
       menubar_wrapper_normal_position.before(menubar_wrapper);
@@ -306,24 +296,24 @@ enhanced_settings.add_hook('kill_top', (() => {
       if (kill_element.parentNode) kill_element.parentNode.removeChild(kill_element);
     }
     window.dispatchEvent(new Event('resize')); // Recalculate sizes of elements
-  };
-})(), true);
+  })
+}
 
 // Feed moderator icon
-enhanced_settings.add_hook('feed_moderation', (() => {
-  let style = document.createElement('style');
+{
+  const style = document.createElement('style');
   style.textContent = '#feed-topic .cmty-topic-moderate{ display: inline !important; }';
-  return value => {
+  enhanced_settings.add_hook('feed_moderation', value => {
     if (value) {
       document.head.appendChild(style);
     } else {
       if (style.parentNode) style.parentNode.removeChild(style);
     }
-  };
-})(), true);
+  }, true)
+}
 
 // Notifications
-enhanced_settings.add_hook('notifications', (() => {
+{
   let notify_functions = [
     AoPS.Ui.Flyout.display,
     a => {
@@ -334,11 +324,12 @@ enhanced_settings.add_hook('notifications', (() => {
       setTimeout(notification.close.bind(notification), 5000);
     }
   ];
-  return value => {
+
+  enhanced_settings.add_hook('notifications', value => {
     if (value && Notification.permission != "granted") Notification.requestPermission();
     AoPS.Ui.Flyout.display = notify_functions[+value];
-  };
-})(), true);
+  }, true);
+}
 
 function show_enhanced_configurator() {
   UI_ELEMENTS = {
@@ -359,14 +350,15 @@ function show_enhanced_configurator() {
 }
 
 // Add "Enhanced" option to login dropdown
-(el => {
+{
+  const el = document.querySelector('.login-dropdown-content');
   if (el === null) return;
   let enhanced_settings_element = document.createElement('a');
   enhanced_settings_element.classList.add('menu-item');
   enhanced_settings_element.innerText = 'Enhanced';
   enhanced_settings_element.addEventListener('click', e => { e.preventDefault(); show_enhanced_configurator(); });
   el.appendChild(enhanced_settings_element);
-})(document.querySelector('.login-dropdown-content'));
+}
 
 // Prevent errors when trying to modify AoPS Community on pages where it doesn't exist
 if (AoPS.Community) {

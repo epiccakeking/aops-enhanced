@@ -18,14 +18,15 @@ Devel branches are no longer used, instead you should use the latest major versi
 
 ### Use hooks
 AoPS Enhanced has a feature called hooks that makes it easier to create features that instantly toggle on and off.
-Your feature should generally be of the form of a IIFE that returns a function, passed to enhanced_settings.add_hook.
+Your feature should generally be of the form of a block that at the end calls add_hook.
 
 For example, for the general layout of a toggleable feature:
 ```javascript
-enhanced_settings.add_hook('feature_setting_name', (() => {
+// Some comment to describe your feature
+{
   // Initialize variables such as elements that will be reused.
   // YOUR CODE HERE
-  return value => {
+  enhanced_settings.add_hook('your_feature', value => {
     if (value) {
       // Handle enabling the feature
       // YOUR CODE HERE
@@ -33,8 +34,8 @@ enhanced_settings.add_hook('feature_setting_name', (() => {
       // Handle disabling the feature
       // YOUR CODE HERE
     }
-  };
-})(), true);
+  });
+}
 ```
 
 ### Clean failure
