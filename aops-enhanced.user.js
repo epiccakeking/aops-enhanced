@@ -146,7 +146,7 @@ background: #111 !important;
 
 let quote_schemes = {
   'AoPS': AoPS.Community ? AoPS.Community.Views.Post.prototype.onClickQuote : function () { alert("Quoting failed") }, // Uses dummy function as a fallback when community is undefined.
-  'Enhanced': function () { this.topic.appendToReply("[quote name=\"" + this.model.get("username") + "\" url=\"/community/p" + this.model.get("post_id") + "\"]\n" + this.model.get("post_canonical").trim() + "\n[/quote]\n\n") },
+  'Enhanced': function () { this.topic.appendToReply("[quote name=\"" + this.model.get("username") + "\" url=\"/community/p" + this.model.get("post_id") + "\"]\n" + this.model.get("post_canonical").trim() + "[/quote]\n\n") },
   'Link': function () { this.topic.appendToReply(`@[url=https://aops.com/community/p${this.model.get("post_id")}]${this.model.get("username")} (#${this.model.get("post_number")}):[/url]`); },
   'Hide': function () {
     this.topic.appendToReply(`[hide=Post #${this.model.get("post_number")} by ${this.model.get("username")}]
