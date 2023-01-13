@@ -158,6 +158,31 @@ ${this.model.get('post_canonical').trim()}
   },
 };
 
+let post_link_schemes = {
+  AoPS: AoPS.Community ? AoPS.Community.Views.Post.prototype.onClickDirectLink : function () { alert("Getting link failed"); }, // Uses dummy function as a fallback when community is undefined.
+  Link: function () {
+    let url = "https://aops.com/community/p" + this.model.get("post_id");
+    navigator.clipboard.writeText(url);
+    AoPS.Ui.Flyout.display(`URL copied: ${url}`);
+  },
+  BBCode: function () {
+    let url =
+      "[url]https://aops.com/community/p" +
+      this.model.get("post_id") +
+      "[/url]";
+    navigator.clipboard.writeText(url);
+    AoPS.Ui.Flyout.display(`URL copied: ${url}`);
+  },
+  "Text BBCode": function () {
+    let url =
+      "[url=https://aops.com/community/p" +
+      this.model.get("post_id") +
+      "]Link[/url]";
+    navigator.clipboard.writeText(url);
+    AoPS.Ui.Flyout.display(`URL copied: ${url}`);
+  },
+};
+
 class EnhancedSettingsManager {
   /** Default settings */
   DEFAULTS = {
@@ -334,9 +359,10 @@ for (let setting of ['quote_primary', 'quote_secondary']) {
 function show_enhanced_configurator() {
   UI_ELEMENTS = {
     notifications: settings_ui.toggle('Notifications'),
-    post_links: settings_ui.toggle('Post links'),
     feed_moderation: settings_ui.toggle('Feed moderate icon'),
     kill_top: settings_ui.toggle('Simplify UI'),
+    post_links_secondary: settings_ui.select("Primary post link",Object.keys(post_link_schemes).map((k) => [k, k])),
+    post_links_primary: settings_ui.select("Ctrl post link",Object.keys(post_link_schemes).map((k) => [k, k])), //primary and secondary links are switched for some reason and i couldn't figure it out so their names are switched :/
     quote_primary: settings_ui.select('Primary quote', Object.keys(quote_schemes).map(k => [k, k])),
     quote_secondary: settings_ui.select('Ctrl quote', Object.keys(quote_schemes).map(k => [k, k])),
     theme: settings_ui.select('Theme', Object.keys(themes).map(k => [k, k])),
@@ -365,17 +391,7 @@ if (AoPS.Community) {
   AoPS.Community.Views.Post.prototype.onClickQuote = function (e) {
     quote_schemes[enhanced_settings.get(e.ctrlKey ? 'quote_secondary' : 'quote_primary')].call(this);
   };
-
-  // Direct links
-  (() => {
-    let real_onClickDirectLink = AoPS.Community.Views.Post.prototype.onClickDirectLink;
-    function direct_link_function(e) {
-      let url = 'https://aops.com/community/p' + this.model.get("post_id");
-      navigator.clipboard.writeText(url);
-      AoPS.Ui.Flyout.display(`URL copied: ${url}`);
-    }
-    AoPS.Community.Views.Post.prototype.onClickDirectLink = function (e) {
-      (enhanced_settings.get('post_links') ? direct_link_function : real_onClickDirectLink).call(this, e);
-    }
-  })();
+  AoPS.Community.Views.Post.prototype.onClickDirectLink = function (e) {
+    post_link_schemes[enhanced_settings.get(e.ctrlKey ? "post_links_primary" : "post_links_secondary")].call(this);
+  };
 }
