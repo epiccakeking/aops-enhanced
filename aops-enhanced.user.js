@@ -177,7 +177,7 @@ let post_link_schemes = {
     let url =
       "[url=https://aops.com/community/p" +
       this.model.get("post_id") +
-      "]Link[/url]";
+      "]#" + this.model.get("post_number") + "[/url]";
     navigator.clipboard.writeText(url);
     AoPS.Ui.Flyout.display(`URL copied: ${url}`);
   },
