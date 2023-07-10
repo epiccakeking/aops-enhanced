@@ -416,7 +416,7 @@ const sideButtons = `<button class='delete-color'>-</button>
 var innerModal = document.createElement("div")
 function openColorModal() {
 	innerModal.innerHTML =
-		"Change forum colors here.<br>Main color, secondary color, forum id.<br>Forum id: the number after the 'c' in the forum (e.g. community/c2788149)<br>"
+		"Change forum colors here.<br>Main color, secondary color, forum id.<br>Forum id: the number after the 'c' in the forum (e.g. community/c2788149)<br>Reload page to see changes.<br>"
 	for (let i = 0; i < mainColor.length; i++) {
 		var tempDiv = document.createElement("div")
 		tempDiv.innerHTML = pickerDiv
