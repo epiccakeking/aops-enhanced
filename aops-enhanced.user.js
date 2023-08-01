@@ -363,7 +363,7 @@ function show_enhanced_configurator() {
 // Prevent errors when trying to modify AoPS Community on pages where it doesn't exist
 if (AoPS.Community) {
   AoPS.Community.Views.Post.prototype.onClickQuote = function (e) {
-    quote_schemes[enhanced_settings.get(e.ctrlKey ? 'quote_secondary' : 'quote_primary')].call(this);
+    quote_schemes[enhanced_settings.get((e.ctrlKey||e.metaKey) ? 'quote_secondary' : 'quote_primary')].call(this);
   };
 
   // Direct links
