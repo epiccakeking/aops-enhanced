@@ -338,7 +338,7 @@ function show_enhanced_configurator() {
     feed_moderation: settings_ui.toggle('Feed moderate icon'),
     kill_top: settings_ui.toggle('Simplify UI'),
     quote_primary: settings_ui.select('Primary quote', Object.keys(quote_schemes).map(k => [k, k])),
-    quote_secondary: settings_ui.select('Ctrl quote', Object.keys(quote_schemes).map(k => [k, k])),
+    quote_secondary: settings_ui.select('Ctrl/Cmd quote', Object.keys(quote_schemes).map(k => [k, k])),
     theme: settings_ui.select('Theme', Object.keys(themes).map(k => [k, k])),
   }
   let settings_modal = document.createElement('div');
@@ -363,7 +363,7 @@ function show_enhanced_configurator() {
 // Prevent errors when trying to modify AoPS Community on pages where it doesn't exist
 if (AoPS.Community) {
   AoPS.Community.Views.Post.prototype.onClickQuote = function (e) {
-    quote_schemes[enhanced_settings.get(e.ctrlKey ? 'quote_secondary' : 'quote_primary')].call(this);
+    quote_schemes[enhanced_settings.get((e.ctrlKey||e.metaKey) ? 'quote_secondary' : 'quote_primary')].call(this);
   };
 
   // Direct links
